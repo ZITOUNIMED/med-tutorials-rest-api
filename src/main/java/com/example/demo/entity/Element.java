@@ -1,6 +1,17 @@
 package com.example.demo.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Element {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ELEMENT_ID")
 	private Long id;
 	private String type;
 	private String text;
@@ -9,6 +20,15 @@ public class Element {
 		super();
 	}
 	
+	public Element(Long id, String type, String text) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.text = text;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}

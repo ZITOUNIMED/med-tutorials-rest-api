@@ -31,11 +31,7 @@ public class DocumentController {
 	
 	@PostMapping
 	public ResponseEntity<Void> addDocument(@RequestBody Document document){
-		if(document.getId() != null) {
-			this.documentService.saveDocument(document);
-		} else {
-			documentService.addDocument(document);
-		}
+		this.documentService.saveDocument(document);
 		return ResponseEntity.accepted().build();
 	}
 	
