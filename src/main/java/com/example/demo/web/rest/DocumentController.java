@@ -17,7 +17,7 @@ import com.example.demo.service.DocumentService;
 
 @RestController
 @RequestMapping("/api/document")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("https://med-tutorials-app.herokuapp.com")
 public class DocumentController {
 	
 	@Autowired
