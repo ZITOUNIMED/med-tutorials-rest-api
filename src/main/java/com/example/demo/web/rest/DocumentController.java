@@ -17,7 +17,7 @@ import com.example.demo.service.DocumentService;
 
 @RestController
 @RequestMapping("/api/document")
-@CrossOrigin("https://med-tutorials-app.herokuapp.com")
+@CrossOrigin("http://localhost:4200")
 public class DocumentController {
 	
 	@Autowired
@@ -31,11 +31,7 @@ public class DocumentController {
 	
 	@PostMapping
 	public ResponseEntity<Void> addDocument(@RequestBody Document document){
-		if(document.getId() != null) {
-			this.documentService.saveDocument(document);
-		} else {
-			documentService.addDocument(document);
-		}
+		this.documentService.saveDocument(document);
 		return ResponseEntity.accepted().build();
 	}
 	

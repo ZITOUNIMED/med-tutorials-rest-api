@@ -1,41 +1,28 @@
 package com.example.demo.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Document;
+import com.example.demo.repository.DocumentRepository;
 
 @Service
 public class DocumentService {
 
-	private List<Document> documents;
-	private Long IDS = 0L;
-	
-	DocumentService(){
-		documents = new ArrayList<Document>();
-		documents.add(new Document(IDS++, "Angular 5", null));
-	}
-
-	public void addDocument(Document document) {
-		document.setId(IDS++);
-		documents.add(document);
-	}
+	@Autowired
+	private DocumentRepository documentRepository;
 
 	public List<Document> getDocuments() {
-		return documents;
+		return documentRepository.findAll();
 	}
 
 	public Document getDocument(Long id) {
-		return documents.stream().filter(document -> document.getId().equals(id)).findFirst().orElse(null);
+		return documentRepository.getOne(id);
 	}
 	
 	public void saveDocument(Document document) {
-		int index = documents.indexOf(document);
-		documents.remove(index);
-		documents.add(index, document);
+		documentRepository.save(document);
 	}
 }
