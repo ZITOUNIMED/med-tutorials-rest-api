@@ -20,7 +20,7 @@ public class MedTutorialsRestApiApplication {
 		
 		Document document = new Document(null, "Angular 5", null);
 		
-		document.setElements(Arrays.asList(new Element(null, "TEXT", "Hello world")));
+		document.setElements(Arrays.asList(new Element(null, "TEXT", "Hello world", 0)));
 		
 		documentRepository.save(document);
 		
