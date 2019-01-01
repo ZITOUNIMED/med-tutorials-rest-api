@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ public class DocumentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> addDocument(@RequestBody Document document){
+	public ResponseEntity<Void> saveDocument(@RequestBody Document document){
 		this.documentService.saveDocument(document);
 		return ResponseEntity.accepted().build();
 	}
@@ -39,6 +40,12 @@ public class DocumentController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocument(@PathVariable Long id){
 		return ResponseEntity.ok(documentService.getDocument(id));
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteDocument(@PathVariable Long id){
+		documentService.deleteDocument(id);
+		return ResponseEntity.accepted().build();
 	}
 
 }

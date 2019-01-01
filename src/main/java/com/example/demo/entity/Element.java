@@ -15,16 +15,18 @@ public class Element {
 	private Long id;
 	private String type;
 	private String text;
+	private int row;
 	
 	public Element() {
 		super();
 	}
 	
-	public Element(Long id, String type, String text) {
+	public Element(Long id, String type, String text, int row) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.text = text;
+		this.row = row;
 	}
 
 
@@ -69,6 +71,14 @@ public class Element {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
 	}
 	
 	
