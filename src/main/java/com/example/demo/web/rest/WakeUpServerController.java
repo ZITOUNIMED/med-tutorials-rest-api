@@ -10,7 +10,7 @@ import com.example.demo.service.DocumentService;
 
 @RestController
 @RequestMapping("/api/wake-up-server")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://med-tutorials-app.herokuapp.com")
 public class WakeUpServerController {
 
 	@GetMapping
