@@ -20,28 +20,27 @@ import com.example.demo.service.DocumentService;
 @RequestMapping("/api/document")
 @CrossOrigin("https://med-tutorials-app.herokuapp.com")
 public class DocumentController {
-	
+
 	@Autowired
 	private DocumentService documentService;
-	
-	
+
 	@GetMapping
 	public ResponseEntity<List<Document>> getDocuments(){
 		return ResponseEntity.ok(documentService.getDocuments());
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Void> saveDocument(@RequestBody Document document){
 		this.documentService.saveDocument(document);
 		return ResponseEntity.accepted().build();
 	}
-	
-	
+
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocument(@PathVariable Long id){
 		return ResponseEntity.ok(documentService.getDocument(id));
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteDocument(@PathVariable Long id){
 		documentService.deleteDocument(id);
