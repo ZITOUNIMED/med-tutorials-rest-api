@@ -15,17 +15,16 @@ public class MedTutorialsRestApiApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = SpringApplication.run(MedTutorialsRestApiApplication.class, args);
-		/*
+		
 		DocumentRepository documentRepository = ctx.getBean(DocumentRepository.class);
-		
+
 		Document document = new Document(null, "Angular 5", null);
-		
+
 		document.setElements(Arrays.asList(new Element(null, "TEXT", "Hello world", 0)));
-		
-		documentRepository.save(document);*/
-		
-		
+
+		documentRepository.save(document);
+
+
 	}
 
 }
-
