@@ -16,6 +16,7 @@ public class Element {
 	private String type;
 	private String text;
 	private int row;
+	private int page;
 	
 	public Element() {
 		super();
@@ -79,6 +80,14 @@ public class Element {
 
 	public void setRow(int row) {
 		this.row = row;
+	}
+	
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
 	}
 	
 	
