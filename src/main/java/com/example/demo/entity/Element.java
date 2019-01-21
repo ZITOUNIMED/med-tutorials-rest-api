@@ -14,6 +14,8 @@ public class Element {
 	@Column(name="ELEMENT_ID")
 	private Long id;
 	private String type;
+	
+	@Column(length=1200)
 	private String text;
 	private int row;
 	private int page;
