@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.DocumentSampleDTO;
 import com.example.demo.entity.Document;
 import com.example.demo.service.DocumentService;
 
@@ -43,6 +44,11 @@ public class DocumentController {
 	public ResponseEntity<Void> deleteDocument(@PathVariable Long id){
 		documentService.deleteDocument(id);
 		return ResponseEntity.accepted().build();
+	}
+	
+	@GetMapping("/samples")
+	public ResponseEntity<List<DocumentSampleDTO>>  getDocumentSamples() {
+		return ResponseEntity.ok(documentService.getDocumentSamples());
 	}
 
 }

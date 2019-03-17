@@ -1,6 +1,9 @@
 package com.example.demo;
 
-import java.util.Arrays;
+import java.util.Arrays;import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,11 +26,25 @@ public class MedTutorialsRestApiApplication {
 	@Profile("dev")
 	public CommandLineRunner initData(DocumentRepository documentRepository) {
 		return (args) -> {
-			Document document = new Document(null, "Test", null);
-
-			document.setElements(Arrays.asList(new Element(null, "TEXT", "Hello world", 0)));
-
-			documentRepository.save(document);
+			Stream.of("Mockito", "Java 8", "JUnit")
+			.map(name -> Document.builder()
+						.name(name)
+						.build())
+			.peek(document -> {
+				document.setElements(IntStream.range(0, 3)
+				.mapToObj(number -> document.getName() + " text " + number)
+				.map(text -> Element.builder()
+						.type("TEXT")
+						.text(text)
+						.page(0)
+						.row(Integer.parseInt(text.substring(text.length() - 1)))
+						.build() )
+				.collect(Collectors.toList()));
+			})
+			.collect(Collectors.toList())
+			.forEach(document -> {
+				documentRepository.save(document);
+			});
 		};
 	}
 
