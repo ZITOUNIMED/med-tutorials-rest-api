@@ -5,6 +5,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.example.demo.entity.Role;
+import com.example.demo.entity.User;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.util.RoleEnum;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +19,7 @@ import org.springframework.context.annotation.Profile;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
 import com.example.demo.repository.DocumentRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class MedTutorialsRestApiApplication {
@@ -24,7 +30,10 @@ public class MedTutorialsRestApiApplication {
 
 	@Bean
 	@Profile("dev")
-	public CommandLineRunner initData(DocumentRepository documentRepository) {
+	public CommandLineRunner initData(DocumentRepository documentRepository,
+									  RoleRepository roleRepository,
+									  UserRepository userRepository,
+									  PasswordEncoder passwordEncoder) {
 		return (args) -> {
 			Stream.of("Mockito", "Java 8", "JUnit")
 			.map(name -> Document.builder()
@@ -45,6 +54,22 @@ public class MedTutorialsRestApiApplication {
 			.forEach(document -> {
 				documentRepository.save(document);
 			});
+
+			Role roleUser = new Role(RoleEnum.ROLE_USER);
+			Role roleAdmin = new Role(RoleEnum.ROLE_ADMIN);
+
+			roleRepository.save(roleUser);
+			roleRepository.save(roleAdmin);
+
+			User user = new User("user", passwordEncoder.encode("password1"), true);
+			user.setRoles(Arrays.asList(roleUser));
+
+			userRepository.save(user);
+
+			User admin = new User("admin", passwordEncoder.encode("password2"), true);
+			admin.setRoles(Arrays.asList(roleUser, roleAdmin));
+
+			userRepository.save(admin);
 		};
 	}
 
