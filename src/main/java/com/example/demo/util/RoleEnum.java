@@ -1,20 +1,22 @@
 package com.example.demo.util;
 
 public enum RoleEnum {
-    ROLE_USER("ROLE_USER"),
-    ROLE_ADMIN("ROLE_ADMIN");
+    ROLE_USER("ROLE_USER", "USER"),
+    ROLE_ADMIN("ROLE_ADMIN", "ADMIN");
 
     private String name;
+    private String role;
 
-    RoleEnum(String name) {
+    RoleEnum(String name, String role) {
         this.name = name;
+        this.role = role;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getRole(){
+        return this.role;
     }
 }

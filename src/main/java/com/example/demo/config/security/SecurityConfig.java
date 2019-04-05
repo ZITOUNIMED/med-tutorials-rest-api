@@ -1,5 +1,6 @@
 package com.example.demo.config.security;
 
+import com.example.demo.util.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/wake-up-server/**").permitAll()
 
                 // Document Crud
-                .antMatchers(HttpMethod.DELETE, "/api/document/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/document/**").hasRole(RoleEnum.ROLE_USER.getRole())
 
                 // User Crud
                 .anyRequest().authenticated()
