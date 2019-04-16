@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.DocumentSampleDTO;
 import com.example.demo.entity.Document;
 import com.example.demo.repository.DocumentRepository;
 
@@ -28,5 +30,15 @@ public class DocumentService {
 
 	public void deleteDocument(Long id) {
 		documentRepository.deleteById(id);
+	}
+
+	public List<DocumentSampleDTO> getDocumentSamples() {
+		return documentRepository.findAll()
+				.stream()
+				.map(document -> DocumentSampleDTO.builder()
+						.id(document.getId())
+						.name(document.getName())
+						.build())
+				.collect(Collectors.toList());
 	}
 }
