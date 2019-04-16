@@ -38,10 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/signin").permitAll()
                 .antMatchers("/auth/signup").permitAll()
+                .antMatchers("/api/document/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/wake-up-server/**").permitAll()
 
                 // Document Crud
-                .antMatchers(HttpMethod.DELETE, "/api/document/**").hasRole(RoleEnum.ROLE_ADMIN.getRole())
+//                .antMatchers(HttpMethod.DELETE, "/api/document/**").hasRole(RoleEnum.ROLE_ADMIN.getRole())
 
                 // User Crud
                 .anyRequest().authenticated()
