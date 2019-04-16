@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/wake-up-server/**").permitAll()
 
                 // Document Crud
-                .antMatchers(HttpMethod.DELETE, "/api/document/**").hasRole(RoleEnum.ROLE_USER.getRole())
+                .antMatchers(HttpMethod.DELETE, "/api/document/**").hasRole(RoleEnum.ROLE_ADMIN.getRole())
 
                 // User Crud
                 .anyRequest().authenticated()
