@@ -1,13 +1,10 @@
 package com.example.demo.entity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.example.demo.util.RoleEnum;
 
 @Entity
+@Table(name="APP_ROLE")
 public class Role {
 
     @Id
