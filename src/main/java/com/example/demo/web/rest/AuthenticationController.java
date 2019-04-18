@@ -5,9 +5,11 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.util.RegistrationRulesTypeEnum;
 import com.example.demo.util.RoleEnum;
 import com.example.demo.web.rest.request.SignInRequest;
 import com.example.demo.web.rest.request.SignUpRequest;
+import com.example.demo.web.rest.response.RegistrationRule;
 import com.example.demo.web.rest.response.SignInResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -68,6 +67,18 @@ public class AuthenticationController {
         } catch(AuthenticationException e){
             throw new BadCredentialsException("Invalid username/password supplied");
         }
+    }
+
+    @GetMapping("registration-rules")
+    public ResponseEntity registrationRules(){
+        List<RegistrationRule> rules = new ArrayList<>();
+        rules.add(RegistrationRule.builder().type(RegistrationRulesTypeEnum.MANDATORY).value("A digit must occur at least once.").build());
+        rules.add(RegistrationRule.builder().type(RegistrationRulesTypeEnum.MANDATORY).value("A lower case letter must occur at least once.").build());
+        rules.add(RegistrationRule.builder().type(RegistrationRulesTypeEnum.MANDATORY).value("An upper case letter must occur at least once.").build());
+        rules.add(RegistrationRule.builder().type(RegistrationRulesTypeEnum.MANDATORY).value("A special character must occur at least once.").build());
+        rules.add(RegistrationRule.builder().type(RegistrationRulesTypeEnum.MANDATORY).value("No whitespace allowed in the entire string.").build());
+        rules.add(RegistrationRule.builder().type(RegistrationRulesTypeEnum.MANDATORY).value("Anything, at least 10 places though.").build());
+        return ResponseEntity.ok(rules);
     }
 
     @PostMapping("/signup")

@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/signin").permitAll()
                 .antMatchers("/auth/signup").permitAll()
+                .antMatchers("/auth/registration-rules").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/wake-up-server/**").permitAll()
 
                 // Document Crud
