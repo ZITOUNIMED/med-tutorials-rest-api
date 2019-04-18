@@ -8,6 +8,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.util.RoleEnum;
 import com.example.demo.web.rest.request.SignInRequest;
 import com.example.demo.web.rest.request.SignUpRequest;
+import com.example.demo.web.rest.response.SignInResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +60,11 @@ public class AuthenticationController {
                     .map(role -> role.getName())
                     .collect(Collectors.toList());
             String token = jwtTokenProvider.createToken(username, roles);
-            Map<String, Object> model = new HashMap<>();
-            model.put("username", username);
-            model.put("token", token);
-            return ResponseEntity.ok(model);
+            SignInResponse signInResponse = SignInResponse.builder()
+                    .username(username)
+                    .token(token)
+                    .build();;
+            return ResponseEntity.ok(signInResponse);
         } catch(AuthenticationException e){
             throw new BadCredentialsException("Invalid username/password supplied");
         }
