@@ -122,6 +122,9 @@ public class AuthenticationController {
             user.setPassword(passwordEncoder.encode(password));
             user.setRoles(Arrays.asList(role));
             user.setEnable(true);
+            user.setFirstname(request.getFirstname());
+            user.setLastname(request.getLastname());
+            user.setEmail(request.getEmail());
 
             userRepository.save(user);
 

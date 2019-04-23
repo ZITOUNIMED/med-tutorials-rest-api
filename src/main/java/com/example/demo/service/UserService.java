@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,9 @@ public class UserService {
 	
 	public void deleteUser(Long id) {
 		userRepository.deleteById(id);
+	}
+
+	public Optional<User> findByUsername(String username){
+		return userRepository.findByUsername(username);
 	}
 }
