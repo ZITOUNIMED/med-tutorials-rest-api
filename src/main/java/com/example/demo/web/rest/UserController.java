@@ -28,6 +28,15 @@ public class UserController {
     			.collect(Collectors.toList());
     	return ResponseEntity.ok(users);
     }
+
+    @GetMapping("/by-username/{username}")
+	public ResponseEntity<User> findByUsername(@PathVariable String username){
+    	User user = userService.findByUsername(username).orElse(null);
+    	if(user!=null){
+    		user.setPassword(null); // Don't return password in the response
+		}
+    	return ResponseEntity.ok(user);
+	}
     
     @PostMapping
     public ResponseEntity<Void> saveUser(@RequestBody User user){

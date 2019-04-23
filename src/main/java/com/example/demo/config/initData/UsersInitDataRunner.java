@@ -36,12 +36,16 @@ public class UsersInitDataRunner implements ApplicationRunner {
         Role roleUser = roleRepository.findByName(RoleEnum.ROLE_USER.getName());
         Role roleAdmin = roleRepository.findByName(RoleEnum.ROLE_ADMIN.getName());
 
-        User user = new User("user", passwordEncoder.encode("password1"), true);
+        User user = new User();
+        user.setUsername("user");
+        user.setPassword(passwordEncoder.encode("password1"));
         user.setRoles(Arrays.asList(roleUser));
 
         userRepository.save(user);
 
-        User admin = new User("admin", passwordEncoder.encode("password2"), true);
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setPassword(passwordEncoder.encode("password2"));
         admin.setRoles(Arrays.asList(roleUser, roleAdmin));
 
         userRepository.save(admin);
