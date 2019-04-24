@@ -38,6 +38,7 @@ public class UsersInitDataRunner implements ApplicationRunner {
 
         User user = new User();
         user.setUsername("user");
+        user.setEnable(true);
         user.setPassword(passwordEncoder.encode("password1"));
         user.setRoles(Arrays.asList(roleUser));
 
@@ -47,6 +48,7 @@ public class UsersInitDataRunner implements ApplicationRunner {
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("password2"));
         admin.setRoles(Arrays.asList(roleUser, roleAdmin));
+        admin.setEnable(true);
 
         userRepository.save(admin);
     }
