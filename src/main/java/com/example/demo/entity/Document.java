@@ -44,4 +44,9 @@ public class Document {
 	)
 	private List<Element> elements;
 	
+	public User getOwner() {
+		owner.setPassword(null);
+		return owner;
+	}
+	
 }
