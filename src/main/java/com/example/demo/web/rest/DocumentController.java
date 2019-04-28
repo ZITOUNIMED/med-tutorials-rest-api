@@ -27,6 +27,11 @@ public class DocumentController {
 	public ResponseEntity<List<Document>> getDocuments(){
 		return ResponseEntity.ok(documentService.getDocuments());
 	}
+	
+	@GetMapping("/by-username/{username}")
+	public ResponseEntity<List<Document>> findByOwnerUsername(@PathVariable String username){
+		return ResponseEntity.ok(documentService.findByOwnerUsername(username));
+	}
 
 	@PostMapping
 	public ResponseEntity<Void> saveDocument(@RequestBody Document document){
@@ -49,6 +54,11 @@ public class DocumentController {
 	@GetMapping("/samples")
 	public ResponseEntity<List<DocumentSampleDTO>>  getDocumentSamples() {
 		return ResponseEntity.ok(documentService.getDocumentSamples());
+	}
+	
+	@GetMapping("/samples/by-username/{username}")
+	public ResponseEntity<List<DocumentSampleDTO>> getDocumentSamplesByOwnerUsername(@PathVariable String username){
+		return ResponseEntity.ok(documentService.getDocumentSamplesByOwnerUsername(username));
 	}
 
 }

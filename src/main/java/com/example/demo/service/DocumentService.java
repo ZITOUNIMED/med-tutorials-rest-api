@@ -31,6 +31,21 @@ public class DocumentService {
 	public void deleteDocument(Long id) {
 		documentRepository.deleteById(id);
 	}
+	
+	public List<Document> findByOwnerUsername(String username){
+		return this.documentRepository.findByOwnerUsername(username);
+	}
+	
+	public List<DocumentSampleDTO> getDocumentSamplesByOwnerUsername(String username) {
+		return documentRepository.findByOwnerUsername(username)
+				.stream()
+				.map(document -> DocumentSampleDTO.builder()
+						.id(document.getId())
+						.name(document.getName())
+						.build())
+				.collect(Collectors.toList());
+	}
+
 
 	public List<DocumentSampleDTO> getDocumentSamples() {
 		return documentRepository.findAll()
