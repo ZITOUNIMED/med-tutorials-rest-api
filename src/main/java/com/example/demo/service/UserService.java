@@ -22,12 +22,12 @@ public class UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<User> getUsers() {
 		return userRepository.findAll();
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN') or #user.id == null")
+//	@PreAuthorize("hasRole('ROLE_ADMIN') or #user.id == null")
 	public void saveUser(@Param("user") User user) {
 		user.setRoles(user.getRoles()
     	.stream()
