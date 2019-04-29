@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-@Profile("dev")
+@ConditionalOnProperty(value="init.users.data")
 @ConditionalOnBean(RolesInitDataRunner.class)
 public class UsersInitDataRunner implements ApplicationRunner {
 
