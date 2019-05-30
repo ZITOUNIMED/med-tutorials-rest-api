@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/by-username/{username}")
 	public ResponseEntity<User> findByUsername(@PathVariable String username){
-    	User user = userService.findByUsername(username).orElse(null);
+    	User user = userService.findByUsername(username);
     	if(user!=null){
     		user.setPassword(null); // Don't return password in the response
 		}

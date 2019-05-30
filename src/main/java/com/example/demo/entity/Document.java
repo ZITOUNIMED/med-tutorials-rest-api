@@ -9,8 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -31,11 +29,10 @@ public class Document {
 	@Column(name="DOCUMENT_ID")
 	private Long id;
 	private String name;
+	private String confidentiality;
 	
 	@NotNull
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="USER_ID")
-	private User owner;
+	private String ownerUsername;
 	
 	@OneToMany(
 			fetch= FetchType.EAGER, 
@@ -43,12 +40,5 @@ public class Document {
 			orphanRemoval=true
 	)
 	private List<Element> elements;
-	
-	public User getOwner() {
-		if(owner != null){
-		   owner.setPassword(null);
-		}
-		return owner;
-	}
 	
 }

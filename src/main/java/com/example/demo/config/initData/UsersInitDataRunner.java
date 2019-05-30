@@ -53,5 +53,13 @@ public class UsersInitDataRunner implements ApplicationRunner {
         admin.setEnable(true);
 
         userRepository.save(admin);
+        
+        User user1 = new User();
+        user1.setUsername("user1");
+        user1.setEnable(true);
+        user1.setPassword(passwordEncoder.encode("password3"));
+        user1.setRoles(Arrays.asList(roleUser));
+
+        userRepository.save(user1);
     }
 }

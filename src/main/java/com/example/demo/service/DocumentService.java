@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.DocumentSampleDTO;
@@ -16,6 +18,8 @@ public class DocumentService {
 	@Autowired
 	private DocumentRepository documentRepository;
 
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'read') or hasRole('ROLE_ADMIN')")
 	public List<Document> getDocuments() {
 		return documentRepository.findAll();
 	}
@@ -31,28 +35,17 @@ public class DocumentService {
 	public void deleteDocument(Long id) {
 		documentRepository.deleteById(id);
 	}
-	
-	public List<Document> findByOwnerUsername(String username){
-		return this.documentRepository.findByOwnerUsername(username);
-	}
-	
-	public List<DocumentSampleDTO> getDocumentSamplesByOwnerUsername(String username) {
-		return documentRepository.findByOwnerUsername(username)
-				.stream()
-				.map(document -> DocumentSampleDTO.builder()
-						.id(document.getId())
-						.name(document.getName())
-						.build())
-				.collect(Collectors.toList());
-	}
 
-
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'read') or hasRole('ROLE_ADMIN')")
 	public List<DocumentSampleDTO> getDocumentSamples() {
 		return documentRepository.findAll()
 				.stream()
 				.map(document -> DocumentSampleDTO.builder()
 						.id(document.getId())
 						.name(document.getName())
+						.ownerUsername(document.getOwnerUsername())
+						.confidentiality(document.getConfidentiality())
 						.build())
 				.collect(Collectors.toList());
 	}
