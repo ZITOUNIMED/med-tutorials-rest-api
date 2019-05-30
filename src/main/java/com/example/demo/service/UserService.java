@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class UserService {
 	}
 
 	@PreAuthorize("#username == authentication.name or hasRole('ROLE_ADMIN')")
-	public Optional<User> findByUsername(@Param("username") String username){
+	public User findByUsername(@Param("username") String username){
 		return userRepository.findByUsername(username);
 	}
 }
