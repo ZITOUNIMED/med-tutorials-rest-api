@@ -30,6 +30,8 @@ public class Document {
 	private Long id;
 	private String name;
 	private String confidentiality;
+	private String author;
+	private String description;
 	
 	@NotNull
 	private String ownerUsername;

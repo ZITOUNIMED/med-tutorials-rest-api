@@ -49,4 +49,8 @@ public class DocumentService {
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	public void saveAllDocuments(List<Document> documents) {
+		documentRepository.saveAll(documents);
+	}
 }
