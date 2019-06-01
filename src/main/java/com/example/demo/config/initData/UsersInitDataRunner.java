@@ -40,6 +40,8 @@ public class UsersInitDataRunner implements ApplicationRunner {
 
         User user = new User();
         user.setUsername("user");
+        user.setFirstname("FirstName");
+        user.setLastname("LastName");
         user.setEnable(true);
         user.setPassword(passwordEncoder.encode("password1"));
         user.setRoles(Arrays.asList(roleUser));
@@ -56,6 +58,8 @@ public class UsersInitDataRunner implements ApplicationRunner {
         
         User user1 = new User();
         user1.setUsername("user1");
+        user1.setFirstname("FirstName1");
+        user1.setLastname("LastName1");
         user1.setEnable(true);
         user1.setPassword(passwordEncoder.encode("password3"));
         user1.setRoles(Arrays.asList(roleUser));

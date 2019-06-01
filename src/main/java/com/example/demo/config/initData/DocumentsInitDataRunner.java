@@ -51,6 +51,7 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
                     .name(name)
                     .confidentiality(confidentiality.getName())
                     .ownerUsername(user.getUsername())
+                    .author(getAuthor(user.getFirstname(), user.getLastname()))
                     .build())
             .peek(document -> {
                 document.setElements(IntStream.range(0, 3)
@@ -71,6 +72,20 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
     	} else {
     		System.out.println("can't find user!");
     	}
+    	
+    }
+    
+    
+    private String getAuthor(String firstname, String lastname){
+    	StringBuilder stb = new StringBuilder();
+    	
+    	if(firstname != null){
+    		stb.append(firstname);
+    	}
+    	if(lastname != null){
+    		stb.append(" ").append(lastname);
+    	}
+    	return stb.toString();
     	
     }
 }

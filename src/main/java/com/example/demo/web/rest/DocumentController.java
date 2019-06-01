@@ -33,6 +33,12 @@ public class DocumentController {
 		this.documentService.saveDocument(document);
 		return ResponseEntity.accepted().build();
 	}
+	
+	@PostMapping("/all")
+	public ResponseEntity<Void> saveAllDocuments(@RequestBody List<Document> documents){
+		this.documentService.saveAllDocuments(documents);
+		return ResponseEntity.accepted().build();
+	}
 
 
 	@GetMapping("/{id}")
