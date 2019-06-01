@@ -21,12 +21,12 @@ public class UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<User> getUsers() {
 		return userRepository.findAll();
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ADMIN') or #user.id == null")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #user.id == null")
 	public void saveUser(@Param("user") User user) {
 		user.setRoles(user.getRoles()
     	.stream()
@@ -45,12 +45,12 @@ public class UserService {
 		userRepository.save(user);
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void deleteUser(Long id) {
 		userRepository.deleteById(id);
 	}
 
-//	@PreAuthorize("#username == authentication.name or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("#username == authentication.name or hasRole('ROLE_ADMIN')")
 	public User findByUsername(@Param("username") String username){
 		return userRepository.findByUsername(username);
 	}
