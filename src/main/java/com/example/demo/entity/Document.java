@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,6 +33,8 @@ public class Document {
 	private String confidentiality;
 	private String author;
 	private String description;
+	private LocalDate lastUpdateDate;
+	private LocalDate creationDate;
 	
 	@NotNull
 	private String ownerUsername;
