@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,12 +47,15 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
     
     private void createUserDocuments(User user, List<String> names, ConfidentialityEnum confidentiality) {
     	if(user != null && names!=null) {
+            LocalDate now = LocalDate.now();
     		names.stream()
             .map(name -> Document.builder()
                     .name(name)
                     .confidentiality(confidentiality.getName())
                     .ownerUsername(user.getUsername())
                     .author(getAuthor(user.getFirstname(), user.getLastname()))
+                    .creationDate(now)
+                    .lastUpdateDate(now)
                     .build())
             .peek(document -> {
                 document.setElements(IntStream.range(0, 3)

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,13 @@ public class DocumentService {
 	}
 	
 	public void saveDocument(Document document) {
+		if(document != null){
+			LocalDate now = LocalDate.now();
+			if(document.getCreationDate() == null){
+				document.setCreationDate(now);
+			}
+			document.setLastUpdateDate(now);
+		}
 		documentRepository.save(document);
 	}
 
