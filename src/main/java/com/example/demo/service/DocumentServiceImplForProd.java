@@ -66,7 +66,9 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 			.stream()
 			.filter(elt -> elt.getId() != null && !stillExisting(elt.getId(), document.getElements()))
 			.forEach(elt -> {
-				attachmentService.deleteById(elt.getAttachmentId());
+				if(elt.getAttachmentId()!=null){
+					attachmentService.deleteById(elt.getAttachmentId());
+				}
 			});
 		}
 	}
