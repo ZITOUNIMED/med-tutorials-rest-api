@@ -31,6 +31,7 @@ public class DocumentService {
 		return documentRepository.getOne(id);
 	}
 	
+	@Transactional
 	public void saveDocument(Document document) {
 		if(document != null){
 			LocalDate now = LocalDate.now();
