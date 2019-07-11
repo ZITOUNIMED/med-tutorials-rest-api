@@ -1,16 +1,13 @@
 package com.example.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Attachment;
 import com.example.demo.entity.Document;
+import com.example.demo.entity.Element;
 
 @Service
 //@Profile("pre-prod", "prod")
@@ -38,6 +35,7 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 	
 	@Override
 	public void save(Document document){
+		deleteUnAttachedAttachment(document);
 		super.save(document);
 		document.getElements()
 		 .stream()
@@ -46,5 +44,33 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 				 attachmentService.save(elt.getAttachment());
 			 }
 		 });
+	}
+	
+	@Override
+	public void deleteById(Long id){
+		Document document = findById(id);
+		document.getElements()
+		.stream()
+		.forEach(elt -> {
+			attachmentService.deleteById(elt.getAttachmentId());
+		});
+		super.deleteById(id);
+	}
+	
+	private void deleteUnAttachedAttachment(Document document){
+		if(document.getId() != null){
+			Document beforeUpdating = findById(document.getId());
+			beforeUpdating.getElements()
+			.stream()
+			.filter(elt -> !stillExisting(elt.getId(), document.getElements()))
+			.forEach(elt -> {
+				attachmentService.deleteById(elt.getAttachmentId());
+			});
+		}
+	}
+
+	private boolean stillExisting(Long id, List<Element> elements) {
+		return elements.stream()
+				.anyMatch(elt -> id.equals(elt.getId()));
 	}
 }
