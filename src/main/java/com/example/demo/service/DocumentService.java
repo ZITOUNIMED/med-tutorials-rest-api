@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.DocumentSampleDTO;
 import com.example.demo.entity.Document;
@@ -25,6 +26,7 @@ public class DocumentService {
 		return documentRepository.findAll();
 	}
 
+	@Transactional
 	public Document getDocument(Long id) {
 		return documentRepository.getOne(id);
 	}
