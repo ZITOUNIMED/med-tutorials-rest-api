@@ -25,35 +25,35 @@ public class DocumentController {
 
 	@GetMapping
 	public ResponseEntity<List<Document>> getDocuments(){
-		return ResponseEntity.ok(documentService.getDocuments());
+		return ResponseEntity.ok(documentService.findAll());
 	}
 
 	@PostMapping
 	public ResponseEntity<Void> saveDocument(@RequestBody Document document){
-		this.documentService.saveDocument(document);
+		this.documentService.save(document);
 		return ResponseEntity.accepted().build();
 	}
 	
 	@PostMapping("/all")
 	public ResponseEntity<Void> saveAllDocuments(@RequestBody List<Document> documents){
-		this.documentService.saveAllDocuments(documents);
+		this.documentService.saveAll(documents);
 		return ResponseEntity.accepted().build();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocument(@PathVariable Long id){
-		return ResponseEntity.ok(documentService.getDocument(id));
+		return ResponseEntity.ok(documentService.findById(id));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteDocument(@PathVariable Long id){
-		documentService.deleteDocument(id);
+		documentService.deleteById(id);
 		return ResponseEntity.accepted().build();
 	}
 	
 	@GetMapping("/samples")
 	public ResponseEntity<List<DocumentSampleDTO>>  getDocumentSamples() {
-		return ResponseEntity.ok(documentService.getDocumentSamples());
+		return ResponseEntity.ok(documentService.findAllDocumentSampleDTOs());
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,16 @@ public class Element {
 	private int row;
 	private int page;
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+	private Long attachmentId;
+	
+//	@OneToOne(cascade = CascadeType.REMOVE, fetch= FetchType.LAZY)
+	@Transient
 	private Attachment attachment;
+	
+	public void setAttachment(Attachment attachment){
+		if(attachment != null){
+			attachmentId = attachment.getId();
+		}
+		this.attachment = attachment;
+	}
 }
