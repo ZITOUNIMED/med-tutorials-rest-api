@@ -11,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.demo.config.security.jwt.JwtConfigurer;
+import com.example.demo.config.security.jwt.JwtTokenProvider;
+
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

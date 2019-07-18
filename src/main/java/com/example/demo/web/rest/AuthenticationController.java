@@ -1,6 +1,6 @@
 package com.example.demo.web.rest;
 
-import com.example.demo.config.security.JwtTokenProvider;
+import com.example.demo.config.security.jwt.JwtTokenProvider;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RoleRepository;
