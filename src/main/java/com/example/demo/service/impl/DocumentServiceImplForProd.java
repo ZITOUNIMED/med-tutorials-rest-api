@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
@@ -8,14 +8,20 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Attachment;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
+import com.example.demo.repository.DocumentCollectionRepository;
+import com.example.demo.repository.DocumentRepository;
+import com.example.demo.service.AttachmentService;
 
 @Service
 //@Profile("pre-prod", "prod")
 @Primary
 public class DocumentServiceImplForProd extends DocumentServiceImpl {
-	 private AttachmentService attachmentService;
-	 
-	 public DocumentServiceImplForProd(AttachmentService attachmentService) {
+	private final AttachmentService attachmentService;
+
+	public DocumentServiceImplForProd(DocumentRepository documentRepository,
+			DocumentCollectionRepository documentCollectionRepository, 
+			AttachmentService attachmentService) {
+		super(documentRepository, documentCollectionRepository);
 		this.attachmentService = attachmentService;
 	}
 

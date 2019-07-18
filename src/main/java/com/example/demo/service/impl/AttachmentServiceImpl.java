@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Attachment;
 import com.example.demo.repository.AttachmentRepository;
+import com.example.demo.service.AttachmentService;
 
 @Service
 public class AttachmentServiceImpl implements AttachmentService {

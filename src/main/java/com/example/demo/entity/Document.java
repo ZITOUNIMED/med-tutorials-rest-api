@@ -29,7 +29,11 @@ public class Document {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="DOCUMENT_ID")
 	private Long id;
+	
+	@NotNull
 	private String name;
+	
+	@NotNull
 	private String confidentiality;
 	private String author;
 	private String description;

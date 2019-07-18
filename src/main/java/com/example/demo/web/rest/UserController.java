@@ -6,20 +6,23 @@ import com.example.demo.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path="/api/user")
 public class UserController {
-	
-	@Autowired
-	private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
-    	List<User> users = userService.getUsers()
+	private final UserService userService;
+
+    public UserController(UserService userService) {
+		super();
+		this.userService = userService;
+	}
+
+	@GetMapping
+    public ResponseEntity<List<User>> findAll(){
+    	List<User> users = userService.findAll()
     			.stream()
     			.map(user -> {
     				user.setPassword(null);
@@ -40,13 +43,13 @@ public class UserController {
     
     @PostMapping
     public ResponseEntity<Void> saveUser(@RequestBody User user){
-    	userService.saveUser(user);
+    	userService.save(user);
     	return ResponseEntity.ok().build();
     }
     
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-    	userService.deleteUser(id);
+    	userService.deleteById(id);
     	return ResponseEntity.accepted().build();
     }
 }
