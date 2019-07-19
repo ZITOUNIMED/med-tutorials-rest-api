@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Attachment;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
-import com.example.demo.repository.DocumentCollectionRepository;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.service.AttachmentService;
 
@@ -18,10 +17,8 @@ import com.example.demo.service.AttachmentService;
 public class DocumentServiceImplForProd extends DocumentServiceImpl {
 	private final AttachmentService attachmentService;
 
-	public DocumentServiceImplForProd(DocumentRepository documentRepository,
-			DocumentCollectionRepository documentCollectionRepository, 
-			AttachmentService attachmentService) {
-		super(documentRepository, documentCollectionRepository);
+	public DocumentServiceImplForProd(DocumentRepository documentRepository, AttachmentService attachmentService) {
+		super(documentRepository);
 		this.attachmentService = attachmentService;
 	}
 

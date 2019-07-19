@@ -1,14 +1,15 @@
-package com.example.demo.util;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public enum DocumentCollectionTypes {
-	MY_TUTOS("MY_TUTOS"),
-	PUBLIC_TUTOS("PUBLIC_TUTOS"),
-	MY_FAVORITE_TUTOS("MY_FAVORITE_TUTOS");
-	
-	private final String name;
-}
+//package com.example.demo.util;
+//
+//import lombok.AllArgsConstructor;
+//import lombok.Getter;
+//
+//@Getter
+//@AllArgsConstructor
+//public enum DocumentCollectionTypes {
+//	
+//	FAVORITE_DOCUMENTS("FAVORITE_DOCUMENTS"),
+//	PRIVATE_COLLECTION("PRIVATE_COLLECTION"),
+//	PUBLIC_COLLECTION("PUBLIC_COLLECTION");
+//	
+//	private final String name;
+//}

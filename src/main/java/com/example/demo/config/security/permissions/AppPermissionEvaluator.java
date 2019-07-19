@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.config.security.permissions.services.AppPermissionService;
 import com.example.demo.entity.Document;
-import com.example.demo.entity.DocumentCollection;
+import com.example.demo.entity.AppCollection;
 
 @Component
 public class AppPermissionEvaluator implements PermissionEvaluator {
 	private final AppPermissionService<Document, String> documentPermissionService;
-	private final AppPermissionService<DocumentCollection, String> documentCollectionPermissionService;
+	private final AppPermissionService<AppCollection, String> documentCollectionPermissionService;
 
 	public AppPermissionEvaluator(AppPermissionService<Document, String> documentPermissionService,
-			AppPermissionService<DocumentCollection, String> documentCollectionPermissionService) {
+			AppPermissionService<AppCollection, String> documentCollectionPermissionService) {
 		this.documentPermissionService = documentPermissionService;
 		this.documentCollectionPermissionService = documentCollectionPermissionService;
 	}
@@ -25,8 +25,8 @@ public class AppPermissionEvaluator implements PermissionEvaluator {
 	public boolean hasPermission(Authentication authentication, Object targetObj, Object permission) {
 		if(targetObj instanceof Document) {
 			return documentPermissionService.hasPermission(authentication, (Document) targetObj, (String) permission);
-		} else if(targetObj instanceof DocumentCollection){
-			return documentCollectionPermissionService.hasPermission(authentication, (DocumentCollection) targetObj, (String) permission);
+		} else if(targetObj instanceof AppCollection){
+			return documentCollectionPermissionService.hasPermission(authentication, (AppCollection) targetObj, (String) permission);
 		}
 		
 		return false;

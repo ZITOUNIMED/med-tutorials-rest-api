@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.config.security.permissions.services.AppPermissionService;
 import com.example.demo.entity.Document;
-import com.example.demo.util.AppDocumentPermissions;
+import com.example.demo.util.AppPermissionTypes;
 import com.example.demo.util.ConfidentialityEnum;
 
 @Component
@@ -16,9 +16,9 @@ public class DocumentPermissionService implements AppPermissionService<Document,
 	public boolean hasPermission(Authentication authentication, Document document, String permission) {
 		User user = (User) authentication.getPrincipal();
 		switch(permission){
-			case AppDocumentPermissions.OWNER:
+			case AppPermissionTypes.OWNER:
 				return user.getUsername().equals(document.getOwnerUsername());
-			case AppDocumentPermissions.READ_PUBLIC:
+			case AppPermissionTypes.PUBLIC:
 				return ConfidentialityEnum.PUBLIC.getName().equals(document.getConfidentiality());
 		}
 		return false;

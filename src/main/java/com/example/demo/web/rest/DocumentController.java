@@ -3,7 +3,6 @@ package com.example.demo.web.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.DocumentSampleDTO;
 import com.example.demo.entity.Document;
-import com.example.demo.entity.DocumentCollection;
+import com.example.demo.entity.AppCollection;
+import com.example.demo.service.AppCollectionService;
 import com.example.demo.service.DocumentService;
 
 @RestController
 @RequestMapping("/api/document")
 public class DocumentController {
 
-	@Autowired
-	private DocumentService documentService;
+	private final DocumentService documentService;
+	private final AppCollectionService appCollectionService;
+
+	public DocumentController(DocumentService documentService, AppCollectionService appCollectionService) {
+		super();
+		this.documentService = documentService;
+		this.appCollectionService = appCollectionService;
+	}
 
 	@GetMapping({"", "/all"})
 	public ResponseEntity<List<Document>> findAll(){
@@ -37,16 +43,25 @@ public class DocumentController {
 	
 	@GetMapping("/myFavoriteDocuments")
 	public ResponseEntity<List<Document>> findMyFavoriteDocuments(){
-		List<DocumentCollection> colelction = documentService.findMyFavoriteDocuments();
-		if(colelction != null && colelction.size()>0){
-			return ResponseEntity.ok(colelction.get(0).getDocuments());
-		}
+//		List<AppCollection> colelction = appCollectionService.findFavoriteCollections();
+//		if(colelction != null && colelction.size()>0){
+//			return ResponseEntity.ok(colelction.get(0).getDocuments());
+//		}
 		return ResponseEntity.ok(new ArrayList<Document>());
 	}
 	
 	@GetMapping("/myDocuments")
 	public ResponseEntity<List<Document>> findMyDocuments(){
 		return ResponseEntity.ok(documentService.findMyDocuments());
+	}
+	
+	@GetMapping("/byCollectionId/{collectionId}")
+	public ResponseEntity<List<Document>> findDocumentsByCollectionId(@PathVariable Long collectionId){
+		AppCollection appCollection = appCollectionService.findById(collectionId);
+		if(appCollection == null){
+			return ResponseEntity.ok(new ArrayList<>());
+		}
+		return ResponseEntity.ok(appCollection.getDocuments());
 	}
 
 	@PostMapping
@@ -74,10 +89,10 @@ public class DocumentController {
 	
 	@GetMapping("/samples")
 	public ResponseEntity<List<DocumentSampleDTO>>  getDocumentSamples() {
-		List<DocumentCollection> colelction = documentService.findMyFavoriteDocuments();
-		if(colelction != null && colelction.size()>0){
-			return ResponseEntity.ok(documentService.convertToSampleDTOs(colelction.get(0).getDocuments()));
-		}
+//		List<AppCollection> colelction = appCollectionService.findFavoriteCollections();
+//		if(colelction != null && colelction.size()>0){
+//			return ResponseEntity.ok(documentService.convertToSampleDTOs(colelction.get(0).getDocuments()));
+//		}
 		return ResponseEntity.ok(new ArrayList<>());
 	}
 
