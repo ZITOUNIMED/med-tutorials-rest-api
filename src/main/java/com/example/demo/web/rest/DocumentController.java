@@ -1,7 +1,9 @@
 package com.example.demo.web.rest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,10 +45,6 @@ public class DocumentController {
 	
 	@GetMapping("/myFavoriteDocuments")
 	public ResponseEntity<List<Document>> findMyFavoriteDocuments(){
-//		List<AppCollection> colelction = appCollectionService.findFavoriteCollections();
-//		if(colelction != null && colelction.size()>0){
-//			return ResponseEntity.ok(colelction.get(0).getDocuments());
-//		}
 		return ResponseEntity.ok(new ArrayList<Document>());
 	}
 	
@@ -56,10 +54,10 @@ public class DocumentController {
 	}
 	
 	@GetMapping("/byCollectionId/{collectionId}")
-	public ResponseEntity<List<Document>> findDocumentsByCollectionId(@PathVariable Long collectionId){
+	public ResponseEntity<Set<Document>> findDocumentsByCollectionId(@PathVariable Long collectionId){
 		AppCollection appCollection = appCollectionService.findById(collectionId);
 		if(appCollection == null){
-			return ResponseEntity.ok(new ArrayList<>());
+			return ResponseEntity.ok(new HashSet<>());
 		}
 		return ResponseEntity.ok(appCollection.getDocuments());
 	}

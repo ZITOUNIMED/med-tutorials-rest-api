@@ -1,7 +1,9 @@
 package com.example.demo.config.initData;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.boot.ApplicationArguments;
@@ -42,9 +44,9 @@ public class AppCollectionsInitRunner implements ApplicationRunner{
 		AppCollection appCollection = new AppCollection("user", "Test collection", "some description here!");
 		
 		User user1 = userRepository.findByUsername("user1");
-		appCollection.setMembers(Arrays.asList(user1));
+		appCollection.setMembers(new HashSet<>(Arrays.asList(user1)));
 		
-		List<Document> documents = documentRepository.findDocumentsByOwnerUsername("user");
+		Set<Document> documents = documentRepository.findDocumentsByOwnerUsername("user");
 		appCollection.setDocuments(documents);
 		
 		appCollectionRepository.save(appCollection);

@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +16,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,14 +42,14 @@ public class AppCollection {
     @JoinTable(name="APP_COLLECTIONS_DOCUMENTS",
     joinColumns={@JoinColumn(name="APP_COLLECTION_ID")},
     inverseJoinColumns={@JoinColumn(name="DOCUMENT_ID")})
-	private List<Document> documents;
+	private Set<Document> documents;
 	
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="APP_COLLECTIONS_USERS",
     joinColumns={@JoinColumn(name="APP_COLLECTION_ID")},
     inverseJoinColumns={@JoinColumn(name="USER_ID")})
-	private List<User> members;
+	private Set<User> members;
 	
 	public AppCollection(@NotNull String ownerUsername, @NotNull String name, String description) {
 		super();
