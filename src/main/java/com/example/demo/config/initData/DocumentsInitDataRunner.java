@@ -1,16 +1,13 @@
 package com.example.demo.config.initData;
 
 import com.example.demo.entity.Document;
-import com.example.demo.entity.DocumentCollection;
+import com.example.demo.entity.AppCollection;
 import com.example.demo.entity.Element;
 import com.example.demo.entity.User;
-import com.example.demo.repository.DocumentCollectionRepository;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.ConfidentialityEnum;
-import com.example.demo.util.DocumentCollectionTypes;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -33,14 +30,11 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
 
     private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
-    private final DocumentCollectionRepository documentCollectionRepository;
-    
-    public DocumentsInitDataRunner(DocumentRepository documentRepository, UserRepository userRepository,
-			DocumentCollectionRepository documentCollectionRepository) {
+
+	public DocumentsInitDataRunner(DocumentRepository documentRepository, UserRepository userRepository) {
 		super();
 		this.documentRepository = documentRepository;
 		this.userRepository = userRepository;
-		this.documentCollectionRepository = documentCollectionRepository;
 	}
 
 	@Override
@@ -48,25 +42,14 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
         System.out.println("init documents data...");// TODO: replace with logger
 
         User user = userRepository.findByUsername("user");
-        List<Document> createdDocuments = createUserDocuments(user, Arrays.asList("Mockito", "Java 8"), ConfidentialityEnum.PRIVATE);
-        setUserFavoriteDocuments(user, createdDocuments);
+        createUserDocuments(user, Arrays.asList("Mockito", "Java 8"), ConfidentialityEnum.PRIVATE);
         createUserDocuments(user, Arrays.asList("JUnit", "Maven"), ConfidentialityEnum.PUBLIC);
         
         User user1 = userRepository.findByUsername("user1");
         createUserDocuments(user1, Arrays.asList("Rxjs", "Spring framework"), ConfidentialityEnum.PRIVATE);
     }
     
-    private void setUserFavoriteDocuments(User user, List<Document> documents) {
-		DocumentCollection documentCollection = DocumentCollection.builder()
-				.ownerUsername(user.getUsername())
-				.documents(documents)
-				.type(DocumentCollectionTypes.MY_FAVORITE_TUTOS.getName())
-				.build();
-		documentCollectionRepository.save(documentCollection);
-	}
-
-	private List<Document> createUserDocuments(User user, List<String> names, ConfidentialityEnum confidentiality) {
-    	List<Document> createdDocuments = new ArrayList<>();
+	private void createUserDocuments(User user, List<String> names, ConfidentialityEnum confidentiality) {
     	if(user != null && names!=null) {
             LocalDate now = LocalDate.now();
     		names.stream()
@@ -92,13 +75,11 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
             .collect(Collectors.toList())
             .forEach(document -> {
                 documentRepository.save(document);
-                createdDocuments.add(document);
                 System.out.println("add new document "+ confidentiality.getName() +" with name: " + document.getName()+ " for user: " + user.getUsername());// TODO: replace by logger
             });
     	} else {
     		System.out.println("can't find user!");
     	}
-    	return createdDocuments;
     }
     
     

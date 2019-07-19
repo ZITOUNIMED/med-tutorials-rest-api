@@ -10,21 +10,17 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.DocumentSampleDTO;
 import com.example.demo.entity.Document;
-import com.example.demo.entity.DocumentCollection;
-import com.example.demo.repository.DocumentCollectionRepository;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.service.DocumentService;
-import com.example.demo.util.AppDocumentPermissions;
+import com.example.demo.util.AppPermissionTypes;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
 	private final DocumentRepository documentRepository;
-	private final DocumentCollectionRepository documentCollectionRepository;
 
-	public DocumentServiceImpl(DocumentRepository documentRepository,
-			DocumentCollectionRepository documentCollectionRepository) {
+	public DocumentServiceImpl(DocumentRepository documentRepository) {
+		super();
 		this.documentRepository = documentRepository;
-		this.documentCollectionRepository = documentCollectionRepository;
 	}
 
 	@Override
@@ -61,24 +57,17 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, '"+AppDocumentPermissions.READ_PUBLIC+"')")
+	@PostFilter("hasPermission(filterObject, '"+AppPermissionTypes.PUBLIC+"')")
 	@Override
 	public List<Document> findPublicDocuments() {
 		return documentRepository.findAll();
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, '"+AppDocumentPermissions.OWNER+"')")
+	@PostFilter("hasPermission(filterObject, '"+AppPermissionTypes.OWNER+"')")
 	@Override
 	public List<Document> findMyDocuments() {
 		return documentRepository.findAll();
-	}
-	
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, '"+AppDocumentPermissions.MY_FAVORITE+"')")
-	@Override
-	public List<DocumentCollection> findMyFavoriteDocuments() {
-		return documentCollectionRepository.findAll();
 	}
 
 	@Override

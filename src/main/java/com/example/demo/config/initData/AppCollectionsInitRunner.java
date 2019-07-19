@@ -1,0 +1,59 @@
+package com.example.demo.config.initData;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.demo.entity.AppCollection;
+import com.example.demo.entity.Document;
+import com.example.demo.entity.User;
+import com.example.demo.repository.AppCollectionRepository;
+import com.example.demo.repository.DocumentRepository;
+import com.example.demo.repository.UserRepository;
+
+@Component
+@ConditionalOnProperty(value="init.app-collections.data")
+@ConditionalOnBean({UsersInitDataRunner.class, DocumentsInitDataRunner.class})
+@Order(4)
+public class AppCollectionsInitRunner implements ApplicationRunner{
+	private final AppCollectionRepository appCollectionRepository;
+	private final DocumentRepository documentRepository;
+    private final UserRepository userRepository;
+	
+	public AppCollectionsInitRunner(AppCollectionRepository appCollectionRepository,
+			DocumentRepository documentRepository, UserRepository userRepository) {
+		super();
+		this.appCollectionRepository = appCollectionRepository;
+		this.documentRepository = documentRepository;
+		this.userRepository = userRepository;
+	}
+
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		System.out.println("init appCollections data...");// TODO: replace with logger
+		
+		AppCollection appCollection = new AppCollection("user", "Test collection", "some description here!");
+		
+		User user1 = userRepository.findByUsername("user1");
+		appCollection.setMembers(Arrays.asList(user1));
+		
+		List<Document> documents = documentRepository.findDocumentsByOwnerUsername("user");
+		appCollection.setDocuments(documents);
+		
+		appCollectionRepository.save(appCollection);
+		
+		System.out.println("New collection 'Test collection' is added.");
+		System.out.println("New memember 'user1' is added to collection 'Test collection'.");
+		
+		System.out.println("Documents are added to collection 'Test collection': " +
+				documents.stream().map(doc -> doc.getName()).collect(Collectors.toList()));
+	}
+
+}

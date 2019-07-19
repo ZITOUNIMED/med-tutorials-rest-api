@@ -1,25 +1,31 @@
 package com.example.demo.config.security.permissions.services.impl;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.security.permissions.services.AppPermissionService;
-import com.example.demo.entity.DocumentCollection;
-import com.example.demo.util.AppDocumentPermissions;
-import com.example.demo.util.DocumentCollectionTypes;
+import com.example.demo.entity.AppCollection;
+import com.example.demo.util.AppPermissionTypes;
 
 @Component
-public class DocumentCollectionPermissionService implements AppPermissionService<DocumentCollection, String>{
+public class DocumentCollectionPermissionService implements AppPermissionService<AppCollection, String>{
 
 	@Override
-	public boolean hasPermission(Authentication authentication, DocumentCollection documentCollection, String permission) {
+	public boolean hasPermission(Authentication authentication, AppCollection collection, String permission) {
 		User user = (User) authentication.getPrincipal();
+		Predicate<List<com.example.demo.entity.User>> checkMember = (List<com.example.demo.entity.User> members) -> {
+			return members.stream().filter(member -> member.getUsername().equals(user.getUsername()))
+			.findAny().isPresent();
+		};
+		
 		switch(permission){
-			case AppDocumentPermissions.MY_FAVORITE:
-				return (documentCollection.getOwnerUsername().equals(user.getUsername()) &&
-						DocumentCollectionTypes.MY_FAVORITE_TUTOS.getName()
-						.equals(documentCollection.getType()));
+		case AppPermissionTypes.READ:
+			return (collection.getOwnerUsername().equals(user.getUsername()) ||
+					checkMember.test(collection.getMembers()));
 		}
 		return false;
 	}
