@@ -1,6 +1,6 @@
 package com.example.demo.config.security.permissions.services.impl;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,7 @@ public class DocumentCollectionPermissionService implements AppPermissionService
 	@Override
 	public boolean hasPermission(Authentication authentication, AppCollection collection, String permission) {
 		User user = (User) authentication.getPrincipal();
-		Predicate<List<com.example.demo.entity.User>> checkMember = (List<com.example.demo.entity.User> members) -> {
+		Predicate<Set<com.example.demo.entity.User>> checkMember = (Set<com.example.demo.entity.User> members) -> {
 			return members.stream().filter(member -> member.getUsername().equals(user.getUsername()))
 			.findAny().isPresent();
 		};
