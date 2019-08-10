@@ -5,6 +5,9 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.RoleEnum;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -21,7 +24,8 @@ import java.util.Arrays;
 @ConditionalOnBean(RolesInitDataRunner.class)
 @Order(2)
 public class UsersInitDataRunner implements ApplicationRunner {
-
+	private final static Logger logger = LoggerFactory.getLogger(UsersInitDataRunner.class);
+	
     @Autowired
     private RoleRepository roleRepository;
 
@@ -33,37 +37,83 @@ public class UsersInitDataRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args){
-        System.out.println("init users data...");// TODO: replace with logger
+        logger.info("init users data.........");
 
         Role roleUser = roleRepository.findByName(RoleEnum.ROLE_USER.getName());
         Role roleAdmin = roleRepository.findByName(RoleEnum.ROLE_ADMIN.getName());
+        Role roleSourcer = roleRepository.findByName(RoleEnum.ROLE_SOURCER.getName());
 
-        User user = new User();
-        user.setUsername("user");
-        user.setFirstname("FirstName");
-        user.setLastname("LastName");
-        user.setEnable(true);
-        user.setPassword(passwordEncoder.encode("password1"));
-        user.setRoles(Arrays.asList(roleUser));
-
-        userRepository.save(user);
-
-        User admin = new User();
-        admin.setUsername("admin");
-        admin.setPassword(passwordEncoder.encode("password2"));
-        admin.setRoles(Arrays.asList(roleUser, roleAdmin));
-        admin.setEnable(true);
+        User admin = User.builder()
+        		.username("admin")
+        		.password(passwordEncoder.encode("admin"))
+        		.firstname("admin firstname")
+        		.lastname("admin lastname")
+        		.enable(true)
+        		.roles(Arrays.asList(roleAdmin, roleUser, roleSourcer))
+        		.build();
 
         userRepository.save(admin);
+        logger.info("New user "+ admin);
         
-        User user1 = new User();
-        user1.setUsername("user1");
-        user1.setFirstname("FirstName1");
-        user1.setLastname("LastName1");
-        user1.setEnable(true);
-        user1.setPassword(passwordEncoder.encode("password3"));
-        user1.setRoles(Arrays.asList(roleUser));
+        User user1 = User.builder()
+        		.username("user1")
+        		.password(passwordEncoder.encode("user1"))
+        		.firstname("user1 firstname")
+        		.lastname("user1 lastname")
+        		.enable(true)
+        		.roles(Arrays.asList(roleUser))
+        		.build();
 
         userRepository.save(user1);
+        logger.info("New user "+ user1);
+        
+        User user2 = User.builder()
+        		.username("user2")
+        		.password(passwordEncoder.encode("user2"))
+        		.firstname("user2 firstname")
+        		.lastname("user2 lastname")
+        		.enable(true)
+        		.roles(Arrays.asList(roleUser))
+        		.build();
+
+        userRepository.save(user2);
+        logger.info("New user "+ user2);
+        
+        User user3 = User.builder()
+        		.username("user3")
+        		.password(passwordEncoder.encode("user3"))
+        		.firstname("user3 firstname")
+        		.lastname("user3 lastname")
+        		.enable(true)
+        		.roles(Arrays.asList(roleUser))
+        		.build();
+
+        userRepository.save(user3);
+        logger.info("New user "+ user3);
+        
+        User sourcer1 = User.builder()
+        		.username("sourcer1")
+        		.password(passwordEncoder.encode("sourcer1"))
+        		.firstname("sourcer1 firstname")
+        		.lastname("sourcer1 lastname")
+        		.enable(true)
+        		.roles(Arrays.asList(roleSourcer, roleUser))
+        		.build();
+
+        userRepository.save(sourcer1);
+        logger.info("New user "+ sourcer1);
+        
+        User sourcer2 = User.builder()
+        		.username("sourcer2")
+        		.password(passwordEncoder.encode("sourcer2"))
+        		.firstname("sourcer2 firstname")
+        		.lastname("sourcer2 lastname")
+        		.enable(true)
+        		.roles(Arrays.asList(roleSourcer, roleUser))
+        		.build();
+
+        userRepository.save(sourcer2);
+        logger.info("New user "+ sourcer2);
+        
     }
 }
