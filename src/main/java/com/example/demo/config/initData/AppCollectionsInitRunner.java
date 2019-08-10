@@ -2,10 +2,11 @@ package com.example.demo.config.initData;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -25,6 +26,8 @@ import com.example.demo.repository.UserRepository;
 @ConditionalOnBean({UsersInitDataRunner.class, DocumentsInitDataRunner.class})
 @Order(4)
 public class AppCollectionsInitRunner implements ApplicationRunner{
+	private final static Logger logger = LoggerFactory.getLogger(AppCollectionsInitRunner.class);
+
 	private final AppCollectionRepository appCollectionRepository;
 	private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
@@ -39,22 +42,22 @@ public class AppCollectionsInitRunner implements ApplicationRunner{
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		System.out.println("init appCollections data...");// TODO: replace with logger
+		logger.info("init appCollections data...");// TODO: replace with logger
 		
-		AppCollection appCollection = new AppCollection("user", "Test collection", "some description here!");
+		AppCollection appCollection = new AppCollection("sourcer1", "Test collection", "some description here!");
 		
 		User user1 = userRepository.findByUsername("user1");
 		appCollection.setMembers(new HashSet<>(Arrays.asList(user1)));
 		
-		Set<Document> documents = documentRepository.findDocumentsByOwnerUsername("user");
+		Set<Document> documents = documentRepository.findDocumentsByOwnerUsername("sourcer1");
 		appCollection.setDocuments(documents);
 		
 		appCollectionRepository.save(appCollection);
 		
-		System.out.println("New collection 'Test collection' is added.");
-		System.out.println("New memember 'user1' is added to collection 'Test collection'.");
+		logger.info("New collection 'Test collection' is added.");
+		logger.info("New memember 'user1' is added to collection 'Test collection'.");
 		
-		System.out.println("Documents are added to collection 'Test collection': " +
+		logger.info("Documents are added to collection 'Test collection': " +
 				documents.stream().map(doc -> doc.getName()).collect(Collectors.toList()));
 	}
 
