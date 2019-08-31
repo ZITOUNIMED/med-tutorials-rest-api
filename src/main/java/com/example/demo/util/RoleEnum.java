@@ -2,8 +2,7 @@ package com.example.demo.util;
 
 public enum RoleEnum {
     ROLE_USER("ROLE_USER", "USER"),
-    ROLE_ADMIN("ROLE_ADMIN", "ADMIN"),
-    ROLE_SOURCER("ROLE_SOURCER", "SOURCER");
+    ROLE_ADMIN("ROLE_ADMIN", "ADMIN");
 
     private String name;
     private String role;

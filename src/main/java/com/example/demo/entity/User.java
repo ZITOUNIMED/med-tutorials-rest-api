@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -12,11 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name="APP_USER")
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Builder
 public class User {
 
     @Id
@@ -42,12 +36,4 @@ public class User {
             joinColumns={@JoinColumn(name="USER_ID")},
             inverseJoinColumns={@JoinColumn(name="ROLE_ID")})
     private List<Role> roles;
-
-	@Override
-	public String toString() {
-		return "User [firstname=" + firstname + ", lastname=" + lastname + ", username=" + username + ", roles=" + roles
-				+ "]";
-	}
-    
-    
 }
