@@ -3,9 +3,6 @@ package com.example.demo.config.initData;
 import com.example.demo.entity.Role;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.util.RoleEnum;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,23 +14,17 @@ import org.springframework.stereotype.Component;
 @Order(1)
 @ConditionalOnProperty(value="init.roles.data")
 public class RolesInitDataRunner implements ApplicationRunner {
-	private final static Logger logger = LoggerFactory.getLogger(RolesInitDataRunner.class);
 
     @Autowired
     private RoleRepository roleRepository;
 
     @Override
     public void run(ApplicationArguments args){
-        logger.info("init roles data:");
+        System.out.println("init roles data...");// TODO: replace with logger
         Role roleUser = new Role(RoleEnum.ROLE_USER);
         Role roleAdmin = new Role(RoleEnum.ROLE_ADMIN);
-        Role roleSourcer = new Role(RoleEnum.ROLE_SOURCER);
 
         roleRepository.save(roleUser);
-        logger.info("New Role: ROLE_USER");
         roleRepository.save(roleAdmin);
-        logger.info("New Role: ROLE_ADMIN");
-        roleRepository.save(roleSourcer);
-        logger.info("New Role: ROLE_SOURCER");
     }
 }
