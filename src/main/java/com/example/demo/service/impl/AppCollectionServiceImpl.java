@@ -55,4 +55,9 @@ public class AppCollectionServiceImpl implements AppCollectionService {
 		return new ArrayList<>();//appCollectionRepository.findAll();
 	}
 
+	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #appCollection.ownerUsername == authentication.principal.username")
+	public void delete(AppCollection appCollection) {
+		appCollectionRepository.delete(appCollection);
+	}
 }

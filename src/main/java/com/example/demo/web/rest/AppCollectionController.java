@@ -4,12 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.AppCollection;
 import com.example.demo.service.AppCollectionService;
@@ -44,6 +39,13 @@ public class AppCollectionController {
 		AppCollection collection = appCollectionService.findById(id);
 		lightAppCollection.accept(collection);
 		return ResponseEntity.ok(collection);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteCollection(@PathVariable Long id){
+	    AppCollection appCollection = appCollectionService.findById(id);
+		appCollectionService.delete(appCollection);
+		return ResponseEntity.accepted().build();
 	}
 	
 	private Consumer<AppCollection> lightAppCollection = (AppCollection collection) ->{

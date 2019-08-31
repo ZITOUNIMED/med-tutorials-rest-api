@@ -82,4 +82,9 @@ public class DocumentServiceImpl implements DocumentService {
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public void delete(Document document) {
+		// TODO
+	}
 }
