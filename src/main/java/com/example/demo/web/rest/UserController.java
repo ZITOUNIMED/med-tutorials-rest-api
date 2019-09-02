@@ -1,14 +1,11 @@
 package com.example.demo.web.rest;
 
-import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
-import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
 	private final UserService userService;
-	@Autowired
-	private RoleRepository roleRepository;
 
     public UserController(UserService userService) {
 		super();
@@ -48,14 +43,6 @@ public class UserController {
     
     @PostMapping
     public ResponseEntity<Void> saveUser(@RequestBody User user){
-    	if(user != null && user.getRoles()!= null){
-    		user.getRoles().forEach(role -> {
-    			if(role.getId() == null){
-    				Role persistedRole = roleRepository.findByName(role.getName());
-    				role.setId(persistedRole.getId());
-				}
-			});
-		}
     	userService.save(user);
     	return ResponseEntity.ok().build();
     }
