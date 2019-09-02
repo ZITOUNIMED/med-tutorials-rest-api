@@ -40,9 +40,5 @@ public class AttachmentServiceImpl implements AttachmentService {
 	public void saveAll(List<Attachment> list) {
 		attachmentRepository.saveAll(list);
 	}
-
-	@Override
-	public void delete(Attachment attachment) {
-		// TODO
-	}
+ 
 }

@@ -50,11 +50,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void delete(User user) {
-		// TODO
-	}
-
-	@Override
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<User> findAll() {
 		return userRepository.findAll();
