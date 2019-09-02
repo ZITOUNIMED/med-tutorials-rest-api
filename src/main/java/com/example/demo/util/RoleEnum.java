@@ -3,6 +3,7 @@ package com.example.demo.util;
 public enum RoleEnum {
     ROLE_USER("ROLE_USER", "USER"),
     ROLE_ADMIN("ROLE_ADMIN", "ADMIN"),
+    ROLE_GUEST("ROLE_GUEST", "GUEST"),
     ROLE_SOURCER("ROLE_SOURCER", "SOURCER");
 
     private String name;

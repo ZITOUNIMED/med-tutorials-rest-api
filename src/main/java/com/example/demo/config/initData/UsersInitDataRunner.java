@@ -42,6 +42,7 @@ public class UsersInitDataRunner implements ApplicationRunner {
         Role roleUser = roleRepository.findByName(RoleEnum.ROLE_USER.getName());
         Role roleAdmin = roleRepository.findByName(RoleEnum.ROLE_ADMIN.getName());
         Role roleSourcer = roleRepository.findByName(RoleEnum.ROLE_SOURCER.getName());
+		Role roleGuest = roleRepository.findByName(RoleEnum.ROLE_GUEST.getName());
 
         User admin = User.builder()
         		.username("admin")
@@ -114,6 +115,18 @@ public class UsersInitDataRunner implements ApplicationRunner {
 
         userRepository.save(sourcer2);
         logger.info("New user "+ sourcer2);
+
+		User guest = User.builder()
+				.username("guest")
+				.password(passwordEncoder.encode("guest"))
+				.firstname("Guest")
+				.lastname("Guest")
+				.enable(true)
+				.roles(Arrays.asList(roleGuest))
+				.build();
+
+		userRepository.save(guest);
+		logger.info("New user "+ guest);
         
     }
 }

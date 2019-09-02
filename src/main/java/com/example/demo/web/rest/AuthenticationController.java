@@ -125,7 +125,7 @@ public class AuthenticationController {
 			user.setUsername(username);
 			user.setPassword(passwordEncoder.encode(password));
 			user.setRoles(Arrays.asList(role));
-			user.setEnable(true);
+			user.setEnable(false);
 			user.setFirstname(request.getFirstname());
 			user.setLastname(request.getLastname());
 			user.setEmail(request.getEmail());
