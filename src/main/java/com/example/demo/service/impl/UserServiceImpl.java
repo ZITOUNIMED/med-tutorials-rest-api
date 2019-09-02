@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.User;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private RoleRepository roleRepository;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	@PreAuthorize("#username == authentication.name or hasRole('ROLE_ADMIN')")
@@ -45,6 +49,8 @@ public class UserServiceImpl implements UserService{
 				if(user.getId() != null) {
 					String password = userRepository.getOne(user.getId()).getPassword();
 					user.setPassword(password);
+				} else {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
 				}
 				userRepository.save(user);
 	}
