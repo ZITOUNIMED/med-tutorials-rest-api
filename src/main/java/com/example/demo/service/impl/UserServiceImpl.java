@@ -70,4 +70,9 @@ public class UserServiceImpl implements UserService{
 	public void saveAll(List<User> list) {
 		throw new RuntimeException("saveAll method is not implemented yet!");
 	}
+
+	@Override
+	public void delete(User user) {
+		// TODO
+	}
 }
