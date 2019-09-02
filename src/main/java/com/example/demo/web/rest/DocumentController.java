@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.DocumentSampleDTO;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.AppCollection;
 import com.example.demo.service.AppCollectionService;
@@ -37,12 +38,15 @@ public class DocumentController {
 	public ResponseEntity<List<Document>> findAll(){
 		return ResponseEntity.ok(documentService.findAll());
 	}
-	
-	@GetMapping("/publicDocuments")
-	public ResponseEntity<List<Document>> findPublicDocuments(){
-		return ResponseEntity.ok(documentService.findPublicDocuments());
-	}
-	
+
+	private Consumer<Document> makeLightDocument = (Document document) ->{
+		document.setElements(null);
+		document.setDescription("");
+		document.setAuthor("");
+		document.setOwnerUsername("");
+		document.setLastUpdateDate(null);
+	};
+
 	@GetMapping("/myFavoriteDocuments")
 	public ResponseEntity<List<Document>> findMyFavoriteDocuments(){
 		return ResponseEntity.ok(new ArrayList<Document>());
@@ -51,6 +55,11 @@ public class DocumentController {
 	@GetMapping("/myDocuments")
 	public ResponseEntity<List<Document>> findMyDocuments(){
 		return ResponseEntity.ok(documentService.findMyDocuments());
+	}
+
+	@GetMapping("/publicDocuments")
+	public ResponseEntity<List<Document>> findPublicDocuments(){
+		return ResponseEntity.ok(documentService.findPublicDocuments());
 	}
 	
 	@GetMapping("/byCollectionId/{collectionId}")
@@ -84,14 +93,19 @@ public class DocumentController {
 		documentService.deleteById(id);
 		return ResponseEntity.accepted().build();
 	}
-	
-	@GetMapping("/samples")
-	public ResponseEntity<List<DocumentSampleDTO>>  getDocumentSamples() {
-//		List<AppCollection> colelction = appCollectionService.findFavoriteCollections();
-//		if(colelction != null && colelction.size()>0){
-//			return ResponseEntity.ok(documentService.convertToSampleDTOs(colelction.get(0).getDocuments()));
-//		}
-		return ResponseEntity.ok(new ArrayList<>());
+
+	@GetMapping("/light/publicDocuments")
+	public ResponseEntity<List<Document>> findLightPublicDocuments(){
+		List<Document> documents = documentService.findPublicDocuments();
+		return ResponseEntity.ok(documents.stream().peek(makeLightDocument)
+				.collect(Collectors.toList()));
+	}
+
+	@GetMapping("/light/myDocuments")
+	public ResponseEntity<List<Document>> findLightMyDocuments(){
+		List<Document> documents = documentService.findMyDocuments();
+		return ResponseEntity.ok(documents.stream().peek(makeLightDocument)
+				.collect(Collectors.toList()));
 	}
 
 }

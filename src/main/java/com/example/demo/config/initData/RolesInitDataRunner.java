@@ -46,5 +46,12 @@ public class RolesInitDataRunner implements ApplicationRunner {
             roleRepository.save(roleSourcer);
             logger.info("New Role: ROLE_SOURCER");
         }
+
+        Role roleGuest = roleRepository.findByName(RoleEnum.ROLE_GUEST.getName());
+        if(roleGuest == null){
+            roleGuest = new Role(RoleEnum.ROLE_GUEST);
+            roleRepository.save(roleGuest);
+            logger.info("New Role: ROLE_GUEST");
+        }
     }
 }
