@@ -43,7 +43,7 @@ public class AppCollectionController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteCollection(@PathVariable Long id){
-	    AppCollection appCollection = appCollectionService.findById(id);
+		AppCollection appCollection = appCollectionService.findById(id);
 		appCollectionService.delete(appCollection);
 		return ResponseEntity.accepted().build();
 	}
