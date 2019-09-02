@@ -25,15 +25,26 @@ public class RolesInitDataRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args){
         logger.info("init roles data:");
-        Role roleUser = new Role(RoleEnum.ROLE_USER);
-        Role roleAdmin = new Role(RoleEnum.ROLE_ADMIN);
-        Role roleSourcer = new Role(RoleEnum.ROLE_SOURCER);
 
-        roleRepository.save(roleUser);
-        logger.info("New Role: ROLE_USER");
-        roleRepository.save(roleAdmin);
-        logger.info("New Role: ROLE_ADMIN");
-        roleRepository.save(roleSourcer);
-        logger.info("New Role: ROLE_SOURCER");
+        Role roleUser = roleRepository.findByName(RoleEnum.ROLE_USER.getName());
+        if(roleUser == null){
+            roleUser = new Role(RoleEnum.ROLE_USER);
+            roleRepository.save(roleUser);
+            logger.info("New Role: ROLE_USER");
+        }
+
+        Role roleAdmin = roleRepository.findByName(RoleEnum.ROLE_ADMIN.getName());
+        if(roleAdmin == null){
+            roleAdmin = new Role(RoleEnum.ROLE_ADMIN);
+            roleRepository.save(roleAdmin);
+            logger.info("New Role: ROLE_ADMIN");
+        }
+
+        Role roleSourcer = roleRepository.findByName(RoleEnum.ROLE_SOURCER.getName());
+        if(roleSourcer == null){
+            roleSourcer = new Role(RoleEnum.ROLE_SOURCER);
+            roleRepository.save(roleSourcer);
+            logger.info("New Role: ROLE_SOURCER");
+        }
     }
 }
