@@ -1,5 +1,7 @@
 package com.example.demo.web.rest;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +9,14 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.example.demo.service.ExportDocumentPdfService;
+import com.example.demo.util.ElementTypeEnum;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.element.Paragraph;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +37,15 @@ public class DocumentController {
 
 	private final DocumentService documentService;
 	private final AppCollectionService appCollectionService;
+	private final ExportDocumentPdfService exportDocumentPdfService;
 
-	public DocumentController(DocumentService documentService, AppCollectionService appCollectionService) {
+	public DocumentController(DocumentService documentService,
+							  AppCollectionService appCollectionService,
+							  ExportDocumentPdfService exportDocumentPdfService) {
 		super();
 		this.documentService = documentService;
 		this.appCollectionService = appCollectionService;
+		this.exportDocumentPdfService = exportDocumentPdfService;
 	}
 
 	@GetMapping({"", "/all"})
@@ -106,6 +120,17 @@ public class DocumentController {
 		List<Document> documents = documentService.findMyDocuments();
 		return ResponseEntity.ok(documents.stream().peek(makeLightDocument)
 				.collect(Collectors.toList()));
+	}
+
+	@PostMapping("/export-pdf")
+	public ResponseEntity<byte[]> exportDocumentPdf(@RequestBody Document appDocument) throws IOException {
+		byte[] reportBytes = exportDocumentPdfService.exportpdf(appDocument);
+//		HttpHeaders respHeaders = new HttpHeaders();
+//		respHeaders.setContentLength(reportBytes.length);
+//		respHeaders.setContentType(new MediaType("text", "pdf"));
+//		respHeaders.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+//		respHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + appDocument.getName());
+		return new ResponseEntity<>(reportBytes, HttpStatus.OK);
 	}
 
 }
