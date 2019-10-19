@@ -132,7 +132,7 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
 
     private String getLinePrefix(int i, int length) {
         StringBuilder sb = new StringBuilder("");
-        sb.append(i);
+        sb.append(i + 1);
         int from = String.valueOf(i).length();
         int to = String.valueOf(length).length();
         for(int j = from; j<=to; j++){
