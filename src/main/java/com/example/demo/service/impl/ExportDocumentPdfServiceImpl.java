@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -17,8 +18,11 @@ import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,9 +42,17 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PdfWriter stamper = new PdfWriter(byteArrayOutputStream);
 
-//            PdfWriter writer = new PdfWriter("sample.pdf");
             PdfDocument pdfDoc = new PdfDocument(stamper);
+
             com.itextpdf.layout.Document document = new com.itextpdf.layout.Document(pdfDoc);
+            Text docTitle = new Text(appDocument.getName());
+            docTitle.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD));
+            docTitle.setFontSize(21);
+            docTitle.setFontColor(Color.BLUE);
+
+            Paragraph docTitleParagraph = new Paragraph(docTitle);
+            docTitleParagraph.setTextAlignment(TextAlignment.CENTER);
+            document.add(docTitleParagraph);
 
             for (int page = 0; page<= biggestPage; page++){
                 List<Element> pageElements = getSortedPageElements(appDocument.getElements(), page);
@@ -79,6 +91,20 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
+                                        break;
+                                    case SOURCE_CODE:
+                                        if(elt.getText() != null){
+                                            String[] list = elt.getText().split("\n");
+                                            for(int i = 0; i<list.length; i++){
+                                                String linePrefix = getLinePrefix(i, list.length);
+                                                String str = linePrefix + "   " + list[i];
+                                                try {
+                                                    document.add(getBlockElementForSourceCode(str));
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
                                     default: break;
                                 }
                                 if(element != null){
@@ -87,11 +113,41 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
                             });
                 }
             }
+
+            int n = pdfDoc.getNumberOfPages();
+            for (int i = 1; i <= n; i++) {
+                document.showTextAligned(new Paragraph(String.format("page %s of %s", i, n)),
+                        559, 806, i, TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
+            }
+
             document.close();
             return byteArrayOutputStream.toByteArray();
         }
 
         return null;
+    }
+
+    private String getLinePrefix(int i, int length) {
+        StringBuilder sb = new StringBuilder("");
+        sb.append(i);
+        int from = String.valueOf(i).length();
+        int to = String.valueOf(length).length();
+        for(int j = from; j<=to; j++){
+            sb.append(' ');
+        }
+        sb.append('|');
+        return sb.toString();
+    }
+
+    private IBlockElement getBlockElementForSourceCode(String str) throws IOException {
+        Text text = new Text(str);
+        text.setFont(PdfFontFactory.createFont(FontConstants.COURIER_OBLIQUE));
+        text.setBackgroundColor(Color.LIGHT_GRAY);
+        text.setFontSize(10);
+        Paragraph p= new Paragraph (text);
+        p.setMarginTop(1);
+        p.setMarginBottom(1);
+        return p;
     }
 
     private Text getBlockElementTitle(Element elt) throws IOException {
@@ -103,13 +159,13 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
 
     private IBlockElement getBlockElementForSmallTitle(Element elt) throws IOException {
         Text title = getBlockElementTitle(elt);
-        title.setFontSize(14);
+        title.setFontSize(13);
         return new Paragraph(title);
     }
 
     private IBlockElement getBlockElementForMediumTitle(Element elt) throws IOException {
         Text title = getBlockElementTitle(elt);
-        title.setFontSize(16);
+        title.setFontSize(15);
         return new Paragraph(title);
     }
 
