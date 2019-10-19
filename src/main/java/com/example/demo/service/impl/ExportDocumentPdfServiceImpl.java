@@ -60,55 +60,57 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
                     pageElements.stream()
                             .forEach(elt -> {
                                 ElementTypeEnum elementType = ElementTypeEnum.valueOf(elt.getType());
-                                IBlockElement element = null;
-                                switch (elementType){
-                                    case TEXT:
-                                        element = getBlockElementForText(elt);
-                                        break;
-                                    case LIST:
-                                        element = getBlockElementForList(elt);
-                                        break;
-                                    case ATTACHMENT:
-                                        Image img = getBlockElementForAttachment(elt);
-                                        document.add(img);
-                                    case BIG_TITLE:
-                                        try {
-                                            element = getBlockElementForBigTitle(elt);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-                                    case MEDIUM_TITLE:
-                                        try {
-                                            element = getBlockElementForMediumTitle(elt);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-                                    case SMALL_TITLE:
-                                        try {
-                                            element = getBlockElementForSmallTitle(elt);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-                                    case SOURCE_CODE:
-                                        if(elt.getText() != null){
-                                            String[] list = elt.getText().split("\n");
-                                            for(int i = 0; i<list.length; i++){
-                                                String linePrefix = getLinePrefix(i, list.length);
-                                                String str = linePrefix + "   " + list[i];
-                                                try {
-                                                    document.add(getBlockElementForSourceCode(str));
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
+                                if(elt != null && elt.getText() != null){
+                                    IBlockElement element = null;
+                                    switch (elementType){
+                                        case TEXT:
+                                            element = getBlockElementForText(elt);
+                                            break;
+                                        case LIST:
+                                            element = getBlockElementForList(elt);
+                                            break;
+                                        case ATTACHMENT:
+                                            Image img = getBlockElementForAttachment(elt);
+                                            document.add(img);
+                                        case BIG_TITLE:
+                                            try {
+                                                element = getBlockElementForBigTitle(elt);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            break;
+                                        case MEDIUM_TITLE:
+                                            try {
+                                                element = getBlockElementForMediumTitle(elt);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            break;
+                                        case SMALL_TITLE:
+                                            try {
+                                                element = getBlockElementForSmallTitle(elt);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            break;
+                                        case SOURCE_CODE:
+                                            if(elt.getText() != null){
+                                                String[] list = elt.getText().split("\n");
+                                                for(int i = 0; i<list.length; i++){
+                                                    String linePrefix = getLinePrefix(i, list.length);
+                                                    String str = linePrefix + "   " + list[i];
+                                                    try {
+                                                        document.add(getBlockElementForSourceCode(str));
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
                                                 }
                                             }
-                                        }
-                                    default: break;
-                                }
-                                if(element != null){
-                                    document.add(element);
+                                        default: break;
+                                    }
+                                    if(element != null){
+                                        document.add(element);
+                                    }
                                 }
                             });
                 }
