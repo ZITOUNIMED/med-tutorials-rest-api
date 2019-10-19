@@ -125,11 +125,6 @@ public class DocumentController {
 	@PostMapping("/export-pdf")
 	public ResponseEntity<byte[]> exportDocumentPdf(@RequestBody Document appDocument) throws IOException {
 		byte[] reportBytes = exportDocumentPdfService.exportpdf(appDocument);
-//		HttpHeaders respHeaders = new HttpHeaders();
-//		respHeaders.setContentLength(reportBytes.length);
-//		respHeaders.setContentType(new MediaType("text", "pdf"));
-//		respHeaders.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-//		respHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + appDocument.getName());
 		return new ResponseEntity<>(reportBytes, HttpStatus.OK);
 	}
 

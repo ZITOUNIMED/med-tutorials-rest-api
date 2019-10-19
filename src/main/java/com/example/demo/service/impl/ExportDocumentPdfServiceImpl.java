@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -19,6 +20,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,7 +40,6 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PdfWriter stamper = new PdfWriter(byteArrayOutputStream);
 
-//            PdfWriter writer = new PdfWriter("sample.pdf");
             PdfDocument pdfDoc = new PdfDocument(stamper);
             com.itextpdf.layout.Document document = new com.itextpdf.layout.Document(pdfDoc);
 
@@ -79,6 +80,8 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
+                                    case SOURCE_CODE:
+                                        element = getBlockElementForSourceCode(elt);
                                     default: break;
                                 }
                                 if(element != null){
@@ -92,6 +95,13 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
         }
 
         return null;
+    }
+
+    private IBlockElement getBlockElementForSourceCode(Element elt) {
+        Text text = new Text(elt.getText());
+        text.setBackgroundColor(Color.LIGHT_GRAY);
+        Paragraph p= new Paragraph (text);
+        return p;
     }
 
     private Text getBlockElementTitle(Element elt) throws IOException {
