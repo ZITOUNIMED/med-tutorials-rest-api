@@ -12,6 +12,7 @@ import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.element.IBlockElement;
@@ -44,7 +45,7 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
 
             PdfDocument pdfDoc = new PdfDocument(stamper);
 
-            com.itextpdf.layout.Document document = new com.itextpdf.layout.Document(pdfDoc);
+            com.itextpdf.layout.Document document = new com.itextpdf.layout.Document(pdfDoc, PageSize.A4, false);
             Text docTitle = new Text(appDocument.getName());
             docTitle.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD));
             docTitle.setFontSize(21);
