@@ -28,7 +28,7 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 		 document.getElements()
 		 .stream()
 		 .forEach(elt -> {
-			 if(elt.getAttachmentId() != null){
+			 if(elt.getAttachmentId() != null && attachmentService.findById(elt.getAttachmentId()) != null){
 				 Attachment attachment = attachmentService.findById(elt.getAttachmentId());
 				 elt.setAttachment(attachment);
 			 }
@@ -55,7 +55,7 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 		document.getElements()
 		.stream()
 		.forEach(elt -> {
-			if(elt.getAttachmentId()!=null){
+			if(elt.getAttachmentId()!=null && attachmentService.findById(elt.getAttachmentId()) != null){
 				attachmentService.deleteById(elt.getAttachmentId());
 			}
 		});
@@ -69,7 +69,7 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 			.stream()
 			.filter(elt -> elt.getId() != null && !stillExisting(elt.getId(), document.getElements()))
 			.forEach(elt -> {
-				if(elt.getAttachmentId()!=null){
+				if(elt.getAttachmentId()!=null && attachmentService.findById(elt.getAttachmentId()) != null){
 					attachmentService.deleteById(elt.getAttachmentId());
 				}
 			});
