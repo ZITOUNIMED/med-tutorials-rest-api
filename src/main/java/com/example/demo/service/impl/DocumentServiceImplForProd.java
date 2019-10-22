@@ -52,13 +52,14 @@ public class DocumentServiceImplForProd extends DocumentServiceImpl {
 	@Override
 	public void deleteById(Long id){
 		Document document = findById(id);
+		/*
 		document.getElements()
 		.stream()
 		.forEach(elt -> {
 			if(elt.getAttachmentId()!=null && attachmentService.findById(elt.getAttachmentId()) != null){
 				attachmentService.deleteById(elt.getAttachmentId());
 			}
-		});
+		});*/
 		super.deleteById(id);
 	}
 	
