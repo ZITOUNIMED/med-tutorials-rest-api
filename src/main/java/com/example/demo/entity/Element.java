@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.example.demo.deserializer.AppElementContentDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,9 +37,12 @@ public class Element {
 	
 	private Long attachmentId;
 	
-//	@OneToOne(cascade = CascadeType.REMOVE, fetch= FetchType.LAZY)
 	@Transient
 	private Attachment attachment;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JsonDeserialize(using = AppElementContentDeserializer.class)
+	private AppElementContent appElementContent;
 	
 	public void setAttachment(Attachment attachment){
 		if(attachment != null){
