@@ -2,6 +2,7 @@ package com.example.demo.web.rest;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -99,7 +100,17 @@ public class DocumentController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocument(@PathVariable Long id){
-		return ResponseEntity.ok(documentService.findById(id));
+		Document document =documentService.findById(id);
+		BigInteger viewCount = document.getViewCount();
+		if(viewCount != null){
+			viewCount = viewCount.add(BigInteger.ONE);
+		} else {
+			viewCount = BigInteger.ONE;
+		}
+
+		document.setViewCount(viewCount);
+		documentService.save(document);
+		return ResponseEntity.ok(document);
 	}
 
 	@DeleteMapping("/{id}")
