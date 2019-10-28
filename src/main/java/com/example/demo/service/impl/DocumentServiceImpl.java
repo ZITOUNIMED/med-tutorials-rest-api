@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,7 @@ import com.example.demo.util.AppPermissionTypes;
 @Service
 public class DocumentServiceImpl implements DocumentService {
 	private final DocumentRepository documentRepository;
+	private Comparator<Document> sortByViewCount = (d1, d2) -> d1.getViewCount() != null && d2.getViewCount() != null ? d2.getViewCount().compareTo(d1.getViewCount()) : 0;
 
 	public DocumentServiceImpl(DocumentRepository documentRepository) {
 		super();
@@ -52,20 +55,29 @@ public class DocumentServiceImpl implements DocumentService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Override
 	public List<Document> findAll() {
-		return documentRepository.findAll();
+		return documentRepository.findAll()
+				.parallelStream()
+				.sorted(sortByViewCount)
+				.collect(Collectors.toList());
 	}
 
 	@PostFilter("hasPermission(filterObject, '"+AppPermissionTypes.PUBLIC+"')")
 	@Override
 	public List<Document> findPublicDocuments() {
-		return documentRepository.findAll();
+		return documentRepository.findAll()
+				.parallelStream()
+				.sorted(sortByViewCount)
+				.collect(Collectors.toList());
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, '"+AppPermissionTypes.OWNER+"')")
 	@Override
 	public List<Document> findMyDocuments() {
-		return documentRepository.findAll();
+		return documentRepository.findAll()
+				.parallelStream()
+				.sorted(sortByViewCount)
+				.collect(Collectors.toList());
 	}
 
 	@Override
