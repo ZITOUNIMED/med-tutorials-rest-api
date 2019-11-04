@@ -1,23 +1,22 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Document;
+import com.example.demo.repository.DocumentRepository;
+import com.example.demo.service.DocumentService;
+import com.example.demo.util.AppPermissionTypes;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.Document;
-import com.example.demo.repository.DocumentRepository;
-import com.example.demo.service.DocumentService;
-import com.example.demo.util.AppPermissionTypes;
-
 @Service
 public class DocumentServiceImpl implements DocumentService {
 	private final DocumentRepository documentRepository;
-	private Comparator<Document> sortByViewCount = (d1, d2) -> d1.getViewCount() != null && d2.getViewCount() != null ? d2.getViewCount().compareTo(d1.getViewCount()) : 0;
+//	private Comparator<Document> sortByViewCount = (d1, d2) -> d1.getViewCount() != null && d2.getViewCount() != null ? d2.getViewCount().compareTo(d1.getViewCount()) : 0;
 
 	public DocumentServiceImpl(DocumentRepository documentRepository) {
 		super();
@@ -57,7 +56,8 @@ public class DocumentServiceImpl implements DocumentService {
 	public List<Document> findAll() {
 		return documentRepository.findAll()
 				.parallelStream()
-				.sorted(sortByViewCount)
+				.sorted(Comparator.comparingDouble(Document::getViewCount))
+//				.reversed())
 				.collect(Collectors.toList());
 	}
 
@@ -66,7 +66,7 @@ public class DocumentServiceImpl implements DocumentService {
 	public List<Document> findPublicDocuments() {
 		return documentRepository.findAll()
 				.parallelStream()
-				.sorted(sortByViewCount)
+				.sorted(Comparator.comparing(Document::getViewCount))
 				.collect(Collectors.toList());
 	}
 
@@ -76,7 +76,7 @@ public class DocumentServiceImpl implements DocumentService {
 	public List<Document> findMyDocuments() {
 		return documentRepository.findAll()
 				.parallelStream()
-				.sorted(sortByViewCount)
+				.sorted(Comparator.comparing(Document::getViewCount))
 				.collect(Collectors.toList());
 	}
 

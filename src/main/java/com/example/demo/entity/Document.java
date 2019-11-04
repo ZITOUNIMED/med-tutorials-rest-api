@@ -40,7 +40,7 @@ public class Document {
 	private String description;
 	private LocalDate lastUpdateDate;
 	private LocalDate creationDate;
-	private BigInteger viewCount = BigInteger.ZERO;
+	private double viewCount;
 	
 	@NotNull
 	private String ownerUsername;
