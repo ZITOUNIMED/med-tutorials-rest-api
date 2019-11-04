@@ -1,6 +1,14 @@
 package com.example.demo.web.rest;
 
-import java.io.FileNotFoundException;
+import com.example.demo.entity.AppCollection;
+import com.example.demo.entity.Document;
+import com.example.demo.service.AppCollectionService;
+import com.example.demo.service.DocumentService;
+import com.example.demo.service.ExportDocumentPdfService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,28 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import com.example.demo.service.ExportDocumentPdfService;
-import com.example.demo.util.ElementTypeEnum;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.element.Paragraph;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.entity.Document;
-import com.example.demo.entity.AppCollection;
-import com.example.demo.service.AppCollectionService;
-import com.example.demo.service.DocumentService;
 
 @RestController
 @RequestMapping("/api/document")
@@ -99,7 +85,10 @@ public class DocumentController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocument(@PathVariable Long id){
-		return ResponseEntity.ok(documentService.findById(id));
+		Document document =documentService.findById(id);
+		document.setViewCount(document.getViewCount() + 1);
+		documentService.save(document);
+		return ResponseEntity.ok(document);
 	}
 
 	@DeleteMapping("/{id}")
