@@ -1,12 +1,13 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.Attachment;
 import com.example.demo.repository.AttachmentRepository;
 import com.example.demo.service.AttachmentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AttachmentServiceImpl implements AttachmentService {
@@ -34,6 +35,11 @@ public class AttachmentServiceImpl implements AttachmentService {
 	@Override
 	public List<Attachment> findAll() {
 		return attachmentRepository.findAll();
+	}
+
+	@Override
+	public Page<Attachment> findAll(Pageable pageableRequest) {
+		return null; // TODO
 	}
 
 	@Override

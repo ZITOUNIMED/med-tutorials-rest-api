@@ -23,19 +23,14 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
-    private void test(){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PdfWriter stamper = new PdfWriter(baos);
-    }
     @Override
     public byte[] exportpdf(Document appDocument) throws IOException {
         int biggestPage = getBiggestPage(appDocument.getElements());
@@ -221,7 +216,7 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
         if(elements != null && elements.size() > 0){
             return elements.stream()
                     .filter(elt -> elt.getPage() == page)
-                    .sorted((e1, e2) -> e1.getRow() - e2.getRow())
+                    .sorted(Comparator.comparingInt(Element::getRow))
                     .collect(Collectors.toList());
         }
         return null;

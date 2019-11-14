@@ -1,16 +1,17 @@
 package com.example.demo.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.AppCollection;
 import com.example.demo.repository.AppCollectionRepository;
 import com.example.demo.service.AppCollectionService;
 import com.example.demo.util.AppPermissionTypes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AppCollectionServiceImpl implements AppCollectionService {
@@ -31,6 +32,11 @@ public class AppCollectionServiceImpl implements AppCollectionService {
 	@PostFilter("hasPermission(filterObject, '"+AppPermissionTypes.READ+"') or hasRole('ROLE_ADMIN')")
 	public List<AppCollection> findAll() {
 		return appCollectionRepository.findAll();
+	}
+
+	@Override
+	public Page<AppCollection> findAll(Pageable pageableRequest) {
+		return null; // TODO
 	}
 
 	@Override

@@ -5,12 +5,21 @@ import com.example.demo.entity.Document;
 import com.example.demo.service.AppCollectionService;
 import com.example.demo.service.DocumentService;
 import com.example.demo.service.ExportDocumentPdfService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,31 +44,24 @@ public class DocumentController {
 	}
 
 	@GetMapping({"", "/all"})
-	public ResponseEntity<List<Document>> findAll(){
-		return ResponseEntity.ok(documentService.findAll());
+	public ResponseEntity<Page<Document>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+												  @RequestParam(value = "limit", defaultValue = "5") int limit){
+		Pageable pageableRequest = PageRequest.of(page, limit);
+		return ResponseEntity.ok(documentService.findAll(pageableRequest));
 	}
 
-	private Consumer<Document> makeLightDocument = (Document document) ->{
-		document.setElements(null);
-		document.setDescription("");
-		document.setAuthor("");
-		document.setOwnerUsername("");
-		document.setLastUpdateDate(null);
-	};
-
-	@GetMapping("/myFavoriteDocuments")
-	public ResponseEntity<List<Document>> findMyFavoriteDocuments(){
-		return ResponseEntity.ok(new ArrayList<Document>());
-	}
-	
 	@GetMapping("/myDocuments")
-	public ResponseEntity<List<Document>> findMyDocuments(){
-		return ResponseEntity.ok(documentService.findMyDocuments());
+	public ResponseEntity<Page<Document>> findMyDocuments(@RequestParam(value = "page", defaultValue = "0") int page,
+														  @RequestParam(value = "limit", defaultValue = "5") int limit){
+		Pageable pageableRequest = PageRequest.of(page, limit);
+		return ResponseEntity.ok(documentService.findMyDocuments(pageableRequest));
 	}
 
 	@GetMapping("/publicDocuments")
-	public ResponseEntity<List<Document>> findPublicDocuments(){
-		return ResponseEntity.ok(documentService.findPublicDocuments());
+	public ResponseEntity<Page<Document>> findPublicDocuments(@RequestParam(value = "page", defaultValue = "0") int page,
+															  @RequestParam(value = "limit", defaultValue = "5") int limit){
+		Pageable pageableRequest = PageRequest.of(page, limit);
+		return ResponseEntity.ok(documentService.findPublicDocuments(pageableRequest));
 	}
 	
 	@GetMapping("/byCollectionId/{collectionId}")
@@ -69,6 +71,12 @@ public class DocumentController {
 			return ResponseEntity.ok(new HashSet<>());
 		}
 		return ResponseEntity.ok(appCollection.getDocuments());
+	}
+
+	@GetMapping("/myFavoriteDocuments")
+	public ResponseEntity<List<Document>> findMyFavoriteDocuments(@RequestParam(value = "page", defaultValue = "0") int page,
+																  @RequestParam(value = "limit", defaultValue = "5") int limit){
+		return ResponseEntity.ok(null);
 	}
 
 	@PostMapping
@@ -116,5 +124,13 @@ public class DocumentController {
 		byte[] reportBytes = exportDocumentPdfService.exportpdf(appDocument);
 		return new ResponseEntity<>(reportBytes, HttpStatus.OK);
 	}
+
+	private Consumer<Document> makeLightDocument = (Document document) ->{
+		document.setElements(null);
+		document.setDescription("");
+		document.setAuthor("");
+		document.setOwnerUsername("");
+		document.setLastUpdateDate(null);
+	};
 
 }

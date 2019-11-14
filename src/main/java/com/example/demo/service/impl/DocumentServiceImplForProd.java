@@ -1,15 +1,14 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.Attachment;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.service.AttachmentService;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 //@Profile("pre-prod", "prod")
