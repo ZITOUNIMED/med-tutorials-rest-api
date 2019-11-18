@@ -1,21 +1,28 @@
 package com.example.demo.config.initData;
 
+import com.example.demo.entity.Attachment;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
 import com.example.demo.entity.User;
+import com.example.demo.repository.AttachmentRepository;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.ConfidentialityEnum;
-
+import com.example.demo.util.ElementTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -30,16 +37,21 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
 	private final static Logger logger = LoggerFactory.getLogger(DocumentsInitDataRunner.class);
     private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
+    private final AttachmentRepository attachmentRepository;
 
-	public DocumentsInitDataRunner(DocumentRepository documentRepository, UserRepository userRepository) {
+	@Value("classpath:static/images/sample.jpg")
+	Resource imageFile;
+
+	public DocumentsInitDataRunner(DocumentRepository documentRepository, UserRepository userRepository, AttachmentRepository attachmentRepository) {
 		super();
 		this.documentRepository = documentRepository;
 		this.userRepository = userRepository;
+		this.attachmentRepository = attachmentRepository;
 	}
 
 	@Override
     public void run(ApplicationArguments args){
-        logger.info("init documents data...");// TODO: replace with logger
+        logger.info("init documents data...");
 
         User sourcer1 = userRepository.findByUsername("sourcer1");
         createUserDocuments(sourcer1, Arrays.asList("Mockito", "Java 8"), ConfidentialityEnum.PRIVATE);
@@ -50,7 +62,8 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
     }
     
 	private void createUserDocuments(User user, List<String> names, ConfidentialityEnum confidentiality) {
-    	if(user != null && names!=null) {
+
+		if(user != null && names!=null) {
             LocalDate now = LocalDate.now();
     		names.stream()
             .map(name -> Document.builder()
@@ -74,16 +87,48 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
             })
             .collect(Collectors.toList())
             .forEach(document -> {
+            	Element elt = createAttachmentElement(document.getElements().size(), 0);
+            	if(elt != null){
+					document.getElements().add(elt);
+				}
                 documentRepository.save(document);
-               	logger.info("add new document "+ confidentiality.getName() +" with name: " + document.getName()+ " for user: " + user.getUsername());// TODO: replace by logger
+               	logger.info("add new document "+ confidentiality.getName() +" with name: " + document.getName()+ " for user: " + user.getUsername());
             });
     	} else {
     		logger.warn("can't find user!");
     	}
     }
-    
-    
-    private String getAuthor(String firstname, String lastname){
+
+	private Element createAttachmentElement(int row, int page) {
+		// upload image and save it in the database
+		try {
+			File f1 = imageFile.getFile();
+			byte[] data = Files.readAllBytes(f1.toPath());
+			Attachment attachment = Attachment.builder()
+					.width(250)
+					.height(250)
+					.name("My Photo")
+					.data(data)
+					.build();
+
+			attachmentRepository.save(attachment);
+
+			return Element.builder()
+					.attachmentId(attachment.getId())
+					.page(page)
+					.row(row)
+					.type(ElementTypeEnum.ATTACHMENT.name())
+					.build();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+
+	private String getAuthor(String firstname, String lastname){
     	StringBuilder stb = new StringBuilder();
     	
     	if(firstname != null){
@@ -93,6 +138,5 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
     		stb.append(" ").append(lastname);
     	}
     	return stb.toString();
-    	
     }
 }
