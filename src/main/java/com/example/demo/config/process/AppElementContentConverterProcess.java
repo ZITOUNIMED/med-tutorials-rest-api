@@ -55,6 +55,7 @@ public class AppElementContentConverterProcess implements ApplicationRunner {
 							textContent.setType(elt.getType());
 							textContent.setText(elt.getText());
 							elt.setAppElementContent(textContent);
+							elt.setText(null);
 							logger.info("New text is converted to TextContent...");
 							break;
 						case ATTACHMENT:
@@ -69,11 +70,12 @@ public class AppElementContentConverterProcess implements ApplicationRunner {
 											.build();
 									attachmentContent.setType(elt.getType());
 									elt.setAppElementContent(attachmentContent);
+									elt.setAttachmentId(null);
 									logger.info("New Attachment is converted to TextContent...");
 								}
 							}
 					}
-					elt.getAppElementContent().setType(elt.getType());
+					elt.getAppElementContent().setType(type.name());
 					elementRepository.save(elt);
 				});
 

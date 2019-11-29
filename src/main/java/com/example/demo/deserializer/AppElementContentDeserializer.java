@@ -45,6 +45,7 @@ public class AppElementContentDeserializer extends JsonDeserializer<AppElementCo
         }
 
         appElementContent.setId(id);
+        appElementContent.setType(type.name());
         return appElementContent;
     }
 }
