@@ -3,8 +3,9 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
 import com.example.demo.service.ExportDocumentPdfService;
-import com.example.demo.util.AppList;
 import com.example.demo.util.ElementTypeEnum;
+import com.example.demo.util.AppLink;
+import com.example.demo.util.AppList;
 import com.google.gson.Gson;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
@@ -15,8 +16,12 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.action.PdfAction;
+import com.itextpdf.kernel.pdf.annot.PdfLinkAnnotation;
 import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
@@ -25,17 +30,12 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
-    private void test(){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PdfWriter stamper = new PdfWriter(baos);
-    }
     @Override
     public byte[] exportpdf(Document appDocument) throws IOException {
         int biggestPage = getBiggestPage(appDocument.getElements());
@@ -107,6 +107,13 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
                                                     }
                                                 }
                                             }
+                                        case HYPERLINK:
+                                            try {
+                                                element = getBlockElementForHyperlink(elt);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            break;
                                         default: break;
                                     }
                                     if(element != null){
@@ -151,6 +158,23 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
         p.setMarginTop(1);
         p.setMarginBottom(1);
         return p;
+    }
+
+    private IBlockElement getBlockElementForHyperlink(Element elt) throws IOException {
+        Gson g = new Gson();
+        AppLink appLink = g.fromJson(elt.getText(), AppLink.class);
+
+        Rectangle rect = new Rectangle(0, 0);       
+        PdfLinkAnnotation annotation = new PdfLinkAnnotation(rect);  
+
+        PdfAction action = PdfAction.createURI(appLink.getLink());       
+        annotation.setAction(action);             
+      
+        Link link = new Link(appLink.getValue(), annotation);
+        Paragraph paragraph = new Paragraph();              
+      
+        paragraph.add(link.setUnderline());
+        return paragraph;
     }
 
     private Text getBlockElementTitle(Element elt) throws IOException {
