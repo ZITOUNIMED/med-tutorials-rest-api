@@ -1,8 +1,6 @@
 package com.example.demo.web.rest;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,13 +9,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.example.demo.service.ExportDocumentPdfService;
-import com.example.demo.util.ElementTypeEnum;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.element.Paragraph;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,15 +93,6 @@ public class DocumentController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocument(@PathVariable Long id){
 		Document document =documentService.findById(id);
-		BigInteger viewCount = document.getViewCount();
-		if(viewCount != null){
-			viewCount = viewCount.add(BigInteger.ONE);
-		} else {
-			viewCount = BigInteger.ONE;
-		}
-
-		document.setViewCount(viewCount);
-		documentService.save(document);
 		return ResponseEntity.ok(document);
 	}
 
