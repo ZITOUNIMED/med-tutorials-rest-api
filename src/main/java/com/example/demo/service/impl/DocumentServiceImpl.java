@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,6 @@ import com.example.demo.util.AppPermissionTypes;
 @Service
 public class DocumentServiceImpl implements DocumentService {
 	private final DocumentRepository documentRepository;
-	private Comparator<Document> sortByViewCount = (d1, d2) -> d1.getViewCount() != null && d2.getViewCount() != null ? d2.getViewCount().compareTo(d1.getViewCount()) : 0;
 
 	public DocumentServiceImpl(DocumentRepository documentRepository) {
 		super();
@@ -57,7 +55,6 @@ public class DocumentServiceImpl implements DocumentService {
 	public List<Document> findAll() {
 		return documentRepository.findAll()
 				.parallelStream()
-				.sorted(sortByViewCount)
 				.collect(Collectors.toList());
 	}
 
@@ -66,7 +63,6 @@ public class DocumentServiceImpl implements DocumentService {
 	public List<Document> findPublicDocuments() {
 		return documentRepository.findAll()
 				.parallelStream()
-				.sorted(sortByViewCount)
 				.collect(Collectors.toList());
 	}
 
@@ -76,7 +72,6 @@ public class DocumentServiceImpl implements DocumentService {
 	public List<Document> findMyDocuments() {
 		return documentRepository.findAll()
 				.parallelStream()
-				.sorted(sortByViewCount)
 				.collect(Collectors.toList());
 	}
 
