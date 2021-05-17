@@ -14,12 +14,11 @@ import lombok.Setter;
 @Builder
 public class OneChoiceQuestionDTO {
     private String question;
+    private String key;
+    private float score;
     private List<String> items;
     private String correctAnswer;
     private String courrentAnswer;
-    private float score;
-    private float unitScore;
-
 
     public static Optional<OneChoiceQuestionDTO> fromString(String value){
         try {

@@ -42,6 +42,8 @@ public class Document {
 	
 	@NotNull
 	private String ownerUsername;
+
+	private float score;
 	
 	@OneToMany(
 			fetch= FetchType.EAGER, 

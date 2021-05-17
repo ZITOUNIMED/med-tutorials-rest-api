@@ -14,11 +14,11 @@ import lombok.Setter;
 @Builder
 public class MultiChoiceQuestionDTO {
     private String question;
+    private String key;
+    private float score;
     private List<String> items;
     private List<String> correctAnswers;
     private List<String> courrentAnswers;
-    private float score;
-    private float unitScore;
 
     public static Optional<MultiChoiceQuestionDTO> fromString(String value){
         try {

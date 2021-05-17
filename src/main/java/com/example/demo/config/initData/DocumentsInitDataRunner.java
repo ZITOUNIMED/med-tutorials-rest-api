@@ -86,7 +86,6 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
     		stb.append(" ").append(lastname);
     	}
     	return stb.toString();
-    	
     }
 
     private void initElements(Document document){
@@ -103,9 +102,10 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
         OneChoiceQuestionDTO oneChoice1 = OneChoiceQuestionDTO.builder()
             .question("One choice question?")
             .courrentAnswer("courrentAnswer")
-            .correctAnswer("correctAnswer")
+            .correctAnswer("choice 2")
             .items(Arrays.asList("choice 1", "choice 2", "choice 3"))
-            .unitScore(1)
+            .score(1)
+            .key("key1")
             .build();
         document.getElements().add(Element.builder()
             .page(0)
@@ -118,7 +118,7 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
             .question("Multi choices question?")
             .correctAnswers(Arrays.asList("choice 1",  "choice 3"))
             .items(Arrays.asList("choice 1", "choice 2", "choice 3", "choice 4"))
-            .unitScore(0.5f)
+            .score(0.5f)
             .build();
 
         document.getElements().add(Element.builder()
