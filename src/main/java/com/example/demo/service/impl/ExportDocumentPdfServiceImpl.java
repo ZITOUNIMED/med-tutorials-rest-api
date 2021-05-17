@@ -4,8 +4,8 @@ import com.example.demo.entity.Document;
 import com.example.demo.entity.Element;
 import com.example.demo.service.ExportDocumentPdfService;
 import com.example.demo.util.ElementTypeEnum;
-import com.example.demo.util.AppLink;
-import com.example.demo.util.AppList;
+import com.example.demo.util.dto.AppLinkDTO;
+import com.example.demo.util.dto.AppListDTO;
 import com.google.gson.Gson;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
@@ -162,7 +162,7 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
 
     private IBlockElement getBlockElementForHyperlink(Element elt) throws IOException {
         Gson g = new Gson();
-        AppLink appLink = g.fromJson(elt.getText(), AppLink.class);
+        AppLinkDTO appLink = g.fromJson(elt.getText(), AppLinkDTO.class);
 
         Rectangle rect = new Rectangle(0, 0);       
         PdfLinkAnnotation annotation = new PdfLinkAnnotation(rect);  
@@ -212,7 +212,7 @@ public class ExportDocumentPdfServiceImpl implements ExportDocumentPdfService {
 
     private IBlockElement getBlockElementForList(Element elt) {
         Gson g = new Gson();
-        AppList appList = g.fromJson(elt.getText(), AppList.class);
+        AppListDTO appList = g.fromJson(elt.getText(), AppListDTO.class);
         if(appList != null && appList.getItems() != null){
             com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List();
             appList.getItems()

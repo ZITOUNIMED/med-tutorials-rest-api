@@ -6,6 +6,9 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.ConfidentialityEnum;
+import com.example.demo.util.ElementTypeEnum;
+import com.example.demo.util.dto.MultiChoiceQuestionDTO;
+import com.example.demo.util.dto.OneChoiceQuestionDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,17 +64,7 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
                     .creationDate(now)
                     .lastUpdateDate(now)
                     .build())
-            .peek(document -> {
-                document.setElements(IntStream.range(0, 3)
-                        .mapToObj(number -> document.getName() + " text " + number)
-                        .map(text -> Element.builder()
-                                .type("TEXT")
-                                .text(text)
-                                .page(0)
-                                .row(Integer.parseInt(text.substring(text.length() - 1)))
-                                .build() )
-                        .collect(Collectors.toList()));
-            })
+            .peek(this::initElements)
             .collect(Collectors.toList())
             .forEach(document -> {
                 documentRepository.save(document);
@@ -94,5 +87,45 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
     	}
     	return stb.toString();
     	
+    }
+
+    private void initElements(Document document){
+        document.setElements(IntStream.range(0, 3)
+                .mapToObj(number -> document.getName() + " text " + number)
+                .map(text -> Element.builder()
+                        .type("TEXT")
+                        .text(text)
+                        .page(0)
+                        .row(Integer.parseInt(text.substring(text.length() - 1)))
+                        .build() )
+                .collect(Collectors.toList()));
+
+        OneChoiceQuestionDTO oneChoice1 = OneChoiceQuestionDTO.builder()
+            .question("One choice question?")
+            .courrentAnswer("courrentAnswer")
+            .correctAnswer("correctAnswer")
+            .items(Arrays.asList("choice 1", "choice 2", "choice 3"))
+            .unitScore(1)
+            .build();
+        document.getElements().add(Element.builder()
+            .page(0)
+            .row(3)
+            .text(oneChoice1.toString())
+            .type(ElementTypeEnum.ONE_CHOICE_QUESTION.toString())
+            .build());
+
+        MultiChoiceQuestionDTO mutliChoice1 = MultiChoiceQuestionDTO.builder()
+            .question("Multi choices question?")
+            .correctAnswers(Arrays.asList("choice 1",  "choice 3"))
+            .items(Arrays.asList("choice 1", "choice 2", "choice 3", "choice 4"))
+            .unitScore(0.5f)
+            .build();
+
+        document.getElements().add(Element.builder()
+            .page(0)
+            .row(4)
+            .text(mutliChoice1.toString())
+            .type(ElementTypeEnum.MULTI_CHOICES_QUESTION.toString())
+            .build());
     }
 }
