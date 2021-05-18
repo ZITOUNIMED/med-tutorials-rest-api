@@ -118,7 +118,7 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
             .question("Multi choices question?")
             .correctAnswers(Arrays.asList("choice 1",  "choice 3"))
             .items(Arrays.asList("choice 1", "choice 2", "choice 3", "choice 4"))
-            .score(0.5f)
+            .score(2)
             .build();
 
         document.getElements().add(Element.builder()
