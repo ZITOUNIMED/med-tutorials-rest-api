@@ -9,6 +9,7 @@ import com.example.demo.util.ConfidentialityEnum;
 import com.example.demo.util.ElementTypeEnum;
 import com.example.demo.util.dto.MultiChoiceQuestionDTO;
 import com.example.demo.util.dto.OneChoiceQuestionDTO;
+import com.example.demo.util.dto.TextQuestionDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,6 +127,35 @@ public class DocumentsInitDataRunner implements ApplicationRunner {
             .row(4)
             .text(mutliChoice1.toString())
             .type(ElementTypeEnum.MULTI_CHOICES_QUESTION.toString())
+            .build());
+
+        TextQuestionDTO shortTextQuestion = TextQuestionDTO.builder()
+            .question("short text question?")
+            .correctAnswer("correctAnswer")
+            .courrentAnswer("courrentAnswer")
+            .score(1)
+            .build();
+
+        document.getElements().add(Element.builder()
+            .page(0)
+            .row(5)
+            .text(shortTextQuestion.toString())
+            .type(ElementTypeEnum.SHORT_TEXT_QUESTION.toString())
+            .build());
+
+        TextQuestionDTO longTextQuestion = TextQuestionDTO.builder()
+            .question("long text question?")
+            .questionComplement("questionComplement")
+            .correctAnswer("correctAnswer")
+            .courrentAnswer("courrentAnswer")
+            .score(2)
+            .build();
+
+        document.getElements().add(Element.builder()
+            .page(0)
+            .row(6)
+            .text(longTextQuestion.toString())
+            .type(ElementTypeEnum.LONG_TEXT_QUESTION.toString())
             .build());
     }
 }
